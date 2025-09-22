@@ -1,0 +1,46 @@
+/* pro-buttons.css */
+
+.pro-button {
+  @apply px-4 py-2 font-bold rounded-md shadow-sm transition-all duration-200 ease-in-out;
+  background: linear-gradient(to bottom, #333 0%, #222 100%);
+  color: #fff;
+  border: 1px solid #444;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.8);
+}
+
+.pro-button:hover {
+  background: linear-gradient(to bottom, #444 0%, #333 100%);
+  border-color: #555;
+}
+
+.pro-button:active {
+  background: linear-gradient(to bottom, #222 0%, #111 100%);
+  transform: scale(0.98);
+  border-color: #666;
+}
+
+.pro-button.active {
+  background: linear-gradient(to bottom, #0f0 0%, #0c0 100%);
+  border-color: #0c0;
+  color: black;
+  font-weight: 900;
+}
+
+.pro-button.indicator {
+  position: relative;
+}
+
+.pro-button.indicator::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background-color: #0f0;
+  display: none;
+}
+
+.pro-button.indicator.active::after {
+  display: block;
+}
