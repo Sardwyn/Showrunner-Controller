@@ -1,0 +1,582 @@
+/* ────────────────────────────────
+   RUNDOWN EDITOR (slide-in overlay)
+   ──────────────────────────────── */
+
+/* Overlay shell */
+
+.pc-editor-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  pointer-events: none;
+}
+
+.pc-editor-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+  pointer-events: auto;
+}
+
+.pc-editor-panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(1200px, 100%);
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+
+  /* simpler “glass” shell */
+  background: linear-gradient(135deg, rgba(5, 8, 18, 0.98), rgba(8, 12, 26, 0.98));
+  border-left: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    -20px 0 50px rgba(0, 0, 0, 0.85),
+    0 0 0 1px rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(20px);
+}
+
+/* Header */
+
+.pc-editor-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.pc-editor-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pc-editor-title {
+  font-size: 15px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #f9fbff;
+}
+
+.pc-editor-subtitle {
+  font-size: 11px;
+  color: rgba(210, 222, 255, 0.72);
+}
+
+.pc-editor-header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: rgba(200, 214, 255, 0.75);
+}
+
+/* Body: three columns (palette / canvas / inspector) */
+
+.pc-editor-body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+.pc-editor-pane {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 14px;
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+
+.pc-editor-pane:last-child {
+  border-right: none;
+}
+
+/* Column widths */
+
+.pc-editor-pane-palette {
+  width: 240px;        /* slightly slimmer palette */
+}
+
+.pc-editor-pane-canvas {
+  flex: 2;             /* give the canvas more horizontal real estate */
+  overflow-y: auto;
+}
+
+.pc-editor-pane-inspector {
+  width: 300px;        /* inspector a bit tighter */
+}
+
+
+/* Pane headings */
+
+.pc-editor-pane-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+}
+
+.pc-editor-pane-title {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #f4f6ff;
+}
+
+.pc-editor-pane-subtitle {
+  font-size: 11px;
+  color: rgba(195, 210, 255, 0.7);
+}
+
+/* Palette: card library */
+
+.pc-editor-palette-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+}
+
+.pc-editor-palette-card {
+  border-radius: 10px;
+  padding: 8px 10px;
+  background: rgba(6, 9, 24, 0.95);
+  border: 1px solid rgba(137, 190, 255, 0.4);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  transition:
+    background 0.12s ease-out,
+    border-color 0.12s ease-out,
+    transform 0.12s ease-out,
+    box-shadow 0.12s ease-out;
+}
+
+.pc-editor-palette-card:hover {
+  background: radial-gradient(circle at top left, rgba(0, 255, 204, 0.25), rgba(5, 8, 20, 0.96));
+  border-color: rgba(185, 230, 255, 0.9);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6);
+}
+
+.pc-editor-palette-title {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.pc-editor-palette-tagline {
+  font-size: 11px;
+  opacity: 0.8;
+}
+
+.pc-editor-palette-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.pc-editor-palette-tag {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 2px 6px;
+  border-radius: 999px;
+  border: 1px solid rgba(129, 186, 255, 0.8);
+  background: rgba(8, 15, 40, 0.8);
+}
+
+/* Canvas: groups and items */
+
+.pc-editor-canvas-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+}
+
+/* Group container */
+
+.pc-editor-group {
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(117, 208, 255, 0.35);
+  background: rgba(10, 10, 18, 0.92);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(16px);
+}
+
+.pc-editor-group-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 0 4px 4px 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  margin-bottom: 4px;
+}
+
+.pc-editor-group-title {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.pc-editor-group-count {
+  font-size: 11px;
+  opacity: 0.7;
+}
+
+/* group items + shared timeline rail */
+
+/* group items – flat list: time on the left, card on the right */
+
+.pc-editor-group-items {
+  margin-top: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* simple two-column row */
+
+.pc-editor-item-row {
+  display: grid;
+  grid-template-columns: 60px minmax(0, 1fr);
+  align-items: stretch;       /* stretch the card vertically */
+  gap: 8px;
+  cursor: pointer;
+  padding: 2px 0;
+}
+
+/* selected row still highlights the card itself */
+.pc-editor-item-row.is-selected .pc-editor-item-card {
+  border-color: #5deaff;
+  background: radial-gradient(circle at right, #132743 0, #05070d 55%);
+}
+
+/* time cell */
+
+.pc-editor-time-rail {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 4px;
+  font-size: 11px;
+  color: #9ba5d1;
+  font-variant-numeric: tabular-nums;
+}
+
+/* no dot, no vertical rail needed now */
+.pc-editor-time-rail::after {
+  content: none;
+}
+
+.pc-editor-time-label {
+  position: static;
+}
+
+/* glowing dot ON the rail */
+
+.pc-editor-time-rail::after {
+  content: "";
+  position: absolute;
+  right: -3px; /* centres dot over the 1px rail */
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: #5deaff;
+  box-shadow: 0 0 6px rgba(93, 234, 255, 0.8);
+}
+
+.pc-editor-time-label {
+  position: relative;
+  z-index: 1;
+}
+
+/* the card itself */
+.pc-editor-item-card {
+  width: 100%;                /* <<< key line: fill the grid column */
+  box-sizing: border-box;
+
+  border-radius: 10px;
+  padding: 6px 8px;
+  background: rgba(10, 10, 18, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(16px);
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: border-color 0.1s ease, background 0.1s ease;
+}
+
+.pc-editor-item-card:hover {
+  border-color: rgba(93, 234, 255, 0.5);
+}
+
+.pc-editor-item-title {
+  font-size: 13px;
+}
+
+.pc-editor-item-meta {
+  font-size: 11px;
+  opacity: 0.75;
+}
+
+/* add group card at the bottom */
+
+.pc-editor-add-group {
+  margin-top: 10px;
+  border-radius: 10px;
+  padding: 10px;
+  border: 1px dashed rgba(0, 255, 204, 0.6);
+  color: rgba(230, 235, 255, 0.8);
+  text-align: center;
+  font-size: 12px;
+  cursor: pointer;
+  background: rgba(0, 15, 25, 0.9);
+  transition:
+    border-color 0.12s ease-out,
+    background 0.12s ease-out,
+    transform 0.12s ease-out;
+}
+
+.pc-editor-add-group:hover {
+  background: radial-gradient(circle at top, rgba(0, 255, 204, 0.3), rgba(0, 8, 15, 0.9));
+  transform: translateY(-1px);
+}
+
+/* INSPECTOR PANEL */
+
+.pc-inspector-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+}
+
+.pc-inspector-card {
+  border-radius: 10px;
+  padding: 8px 10px;
+  background: rgba(10, 10, 18, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(16px);
+}
+
+.pc-inspector-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 6px;
+}
+
+.pc-inspector-card-title {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.pc-inspector-card-subtitle {
+  font-size: 11px;
+  opacity: 0.75;
+}
+
+.pc-inspector-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  font-size: 12px;
+}
+
+.pc-inspector-label {
+  opacity: 0.8;
+}
+
+/* inspector input + select */
+
+.pc-inspector-input,
+.pc-inspector-select {
+  width: 100%;
+  padding: 4px 6px;
+  font-size: 12px;
+  border-radius: 6px;
+  border: 1px solid rgba(150, 170, 210, 0.65);
+  background: rgba(4, 7, 18, 0.98);
+  color: #f3f7ff;
+}
+
+.pc-inspector-input:focus,
+.pc-inspector-select:focus {
+  outline: none;
+  border-color: #5deaff;
+  box-shadow: 0 0 0 1px rgba(93, 234, 255, 0.5);
+}
+
+/* Actions editor */
+
+.pc-actions-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.pc-actions-title {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.pc-actions-subtitle {
+  font-size: 11px;
+  opacity: 0.8;
+}
+
+.pc-actions-tabs {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  border-radius: 999px;
+  padding: 2px;
+  background: rgba(12, 16, 30, 0.9);
+}
+
+.pc-actions-tab {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 3px 8px;
+  border-radius: 999px;
+  border: none;
+  background: transparent;
+  color: rgba(200, 212, 240, 0.9);
+  cursor: pointer;
+}
+
+.pc-actions-tab.is-active {
+  background: radial-gradient(circle at top left, rgba(0, 255, 204, 0.3), rgba(0, 152, 255, 0.4));
+  color: #030509;
+  font-weight: 600;
+}
+
+.pc-actions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pc-actions-row {
+  display: grid;
+  grid-template-columns: 90px minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: 6px;
+  align-items: center;
+}
+
+.pc-actions-kind {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.8;
+}
+
+.pc-actions-input {
+  width: 100%;
+  padding: 4px 6px;
+  font-size: 12px;
+  border-radius: 6px;
+  border: 1px solid rgba(150, 170, 210, 0.65);
+  background: rgba(4, 7, 18, 0.98);
+  color: #f3f7ff;
+}
+
+.pc-actions-input:focus {
+  outline: none;
+  border-color: #5deaff;
+  box-shadow: 0 0 0 1px rgba(93, 234, 255, 0.5);
+}
+
+.pc-actions-button-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 6px;
+}
+
+.pc-actions-add-button {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 4px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 255, 204, 0.8);
+  background: rgba(4, 12, 18, 0.98);
+  color: rgba(213, 255, 242, 0.95);
+  cursor: pointer;
+}
+
+/* Routing section inside inspector */
+
+.pc-editor-routing-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.pc-editor-routing-table th,
+.pc-editor-routing-table td {
+  padding: 4px 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.pc-editor-routing-table th {
+  text-align: left;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  opacity: 0.75;
+}
+
+.pc-editor-routing-role {
+  opacity: 0.85;
+}
+
+.pc-editor-routing-select {
+  width: 100%;
+  padding: 3px 4px;
+  font-size: 11px;
+  border-radius: 4px;
+  border: 1px solid rgba(150, 170, 210, 0.65);
+  background: rgba(4, 7, 18, 0.98);
+  color: #f3f7ff;
+}
+
+/* Scrollbars for canvas */
+
+.pc-editor-pane-canvas::-webkit-scrollbar {
+  width: 6px;
+}
+
+.pc-editor-pane-canvas::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.pc-editor-pane-canvas::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 999px;
+}
+
+.pc-editor-pane-canvas::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.pc-editor-pane-canvas {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}

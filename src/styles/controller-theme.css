@@ -1,0 +1,345 @@
+/* src/styles/controller-theme.css */
+/* Theme variants layered on top of production-controller.css */
+
+/* ========== NEON HUD THEME ========== */
+
+.pc-root.theme-neon {
+  background:
+    radial-gradient(circle at 0% 0%, #022c3a 0, transparent 55%),
+    radial-gradient(circle at 100% 0%, #28114b 0, transparent 50%),
+    radial-gradient(circle at 50% 100%, #020617 0, #000 100%);
+}
+
+.pc-root.theme-neon .pc-header {
+  background:
+    radial-gradient(circle at 0 0, rgba(34, 211, 238, 0.22) 0, transparent 45%),
+    radial-gradient(circle at 100% 0, rgba(168, 85, 247, 0.22) 0, transparent 40%),
+    rgba(15, 23, 42, 0.96);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7);
+  border-bottom-color: rgba(56, 189, 248, 0.4);
+}
+
+.pc-root.theme-neon .pc-panel {
+  background:
+    radial-gradient(circle at 0 0, rgba(34, 211, 238, 0.18) 0, transparent 50%),
+    radial-gradient(circle at 100% 100%, rgba(168, 85, 247, 0.12) 0, transparent 50%),
+    radial-gradient(circle at 50% 0, #020617 0, #020617 60%, #000 100%);
+  box-shadow:
+    0 0 0 1px rgba(56, 189, 248, 0.25),
+    0 16px 40px rgba(8, 47, 73, 0.9);
+  border-radius: 12px;
+}
+
+.pc-root.theme-neon .pc-mode-toggle button.is-active {
+  background: rgba(56, 189, 248, 0.35);
+  box-shadow: 0 0 18px rgba(56, 189, 248, 0.75);
+}
+
+/* ========== STUDIO BLUE THEME ========== */
+
+.pc-root.theme-blue {
+  background:
+    radial-gradient(circle at 0% 0%, #0b1120 0, transparent 55%),
+    radial-gradient(circle at 100% 100%, #020617 0, #000 100%);
+}
+
+.pc-root.theme-blue .pc-header {
+  background: linear-gradient(90deg, #020617 0%, #020617 50%, #020617 100%);
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.9);
+  border-bottom-color: rgba(59, 130, 246, 0.4);
+}
+
+.pc-root.theme-blue .pc-panel {
+  background: radial-gradient(circle at 50% 0, #020617 0, #020617 60%, #020617 100%);
+  box-shadow:
+    0 0 0 1px rgba(59, 130, 246, 0.18),
+    0 14px 34px rgba(15, 23, 42, 0.9);
+}
+
+.pc-root.theme-blue .pc-mode-toggle button.is-active {
+  background: rgba(59, 130, 246, 0.4);
+  box-shadow: 0 0 16px rgba(59, 130, 246, 0.7);
+}
+
+/* ========== SPOOKTOBER ========== */
+
+.pc-root.theme-spooktober {
+  background:
+    url("/themes/spooktober/bg.jpg") center/cover,
+    radial-gradient(circle at 50% 100%, #0a0409 0, black 100%);
+}
+
+.pc-root.theme-spooktober .pc-panel {
+  /* Border frame (9-slice) */
+  border-width: 12px;
+  border-style: solid;
+  border-image-source: url("/themes/spooktober/panel-frame.png");
+  border-image-slice: 12 fill;
+  border-image-repeat: stretch;
+
+  /* Interior texture */
+  background:
+    url("/themes/spooktober/panel-bg.jpg") center/cover,
+    #0a0409;
+
+  /* Shadows */
+  box-shadow:
+    0 0 0 1px rgba(255, 140, 60, 0.25),
+    0 12px 28px rgba(0, 0, 0, 0.9);
+}
+
+.pc-root.theme-spooktober .pc-header {
+  background:
+    linear-gradient(90deg, rgba(255, 110, 60, 0.2), rgba(255, 60, 90, 0.2)),
+    rgba(15, 8, 12, 0.95);
+  border-bottom-color: rgba(255, 110, 60, 0.35);
+}
+
+.pc-root.theme-spooktober .pc-mode-toggle button.is-active {
+  background: rgba(255, 110, 60, 0.35);
+  box-shadow: 0 0 14px rgba(255, 110, 60, 0.75);
+}
+
+
+/* ========== PIP-BOY THEME ========== */
+
+.pc-root.theme-pipboy {
+  background:
+    url("/themes/pipboy/bg.png") center/cover,
+    #020403;
+  position: relative;
+  color: #d1fae5; /* soft mint text */
+}
+
+.pc-root.theme-pipboy::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("/themes/pipboy/vignette.png") center/cover no-repeat;
+  pointer-events: none;
+  opacity: 0.85;
+}
+
+/* Generic panel frame */
+.pc-root.theme-pipboy .pc-panel {
+  border-width: 18px; /* adjust to match your 9-slice frame */
+  border-style: solid;
+  border-image-source: url("/themes/pipboy/panel-frame.png");
+  border-image-slice: 18 fill;
+  border-image-repeat: stretch;
+
+  background:
+    rgba(5, 16, 5, 0.95);
+
+  box-shadow:
+    0 0 0 1px rgba(34, 197, 94, 0.25),
+    0 18px 40px rgba(0, 0, 0, 0.95);
+
+  padding: 10px 12px;
+}
+
+/* Type-specific tweaks using skin classes */
+
+.pc-root.theme-pipboy .pc-panel--monitor {
+  padding: 6px 8px;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(74, 222, 128, 0.1) 0, transparent 55%),
+    rgba(5, 16, 5, 0.96);
+}
+
+.pc-root.theme-pipboy .pc-panel--info {
+  padding: 12px 14px;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(15, 36, 20, 0.9),
+      rgba(15, 36, 20, 0.9) 1px,
+      rgba(8, 20, 10, 0.9) 2px
+    );
+}
+
+.pc-root.theme-pipboy .pc-panel--control {
+  padding: 10px 12px;
+  background:
+    radial-gradient(circle at 0 0, rgba(34, 197, 94, 0.15) 0, transparent 55%),
+    rgba(6, 18, 8, 0.96);
+}
+
+.pc-root.theme-pipboy .pc-panel--mixer {
+  padding: 10px 10px;
+  background:
+    linear-gradient(180deg, rgba(6, 20, 10, 0.95), rgba(3, 10, 6, 0.98));
+}
+
+.pc-root.theme-pipboy .pc-header {
+  background:
+    linear-gradient(90deg, rgba(21, 64, 34, 0.96), rgba(12, 38, 22, 0.96));
+  border-bottom-color: rgba(34, 197, 94, 0.55);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.9);
+}
+
+.pc-root.theme-pipboy .pc-mode-toggle button.is-active {
+  background: rgba(34, 197, 94, 0.38);
+  box-shadow: 0 0 16px rgba(34, 197, 94, 0.8);
+}
+
+.pc-root.theme-pipboy .pc-theme-toggle button.is-active {
+  background: rgba(22, 101, 52, 0.9);
+}
+
+/* ========== RUNDOWN PANEL ========== */
+
+/* ========== RUNDOWN PANEL ========== */
+
+.rundown-item {
+  position: relative;
+  padding: 6px 10px;
+  border-radius: 6px;
+  margin-bottom: 6px;
+  background: #0b1220;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.15s ease;
+
+  /* NEW: make the card a vertical stack: [row] + [progress bar] */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.rundown-item-current {
+  background: #1e293b;
+  box-shadow: 0 0 0 1px #38bdf8, 0 0 12px rgba(56, 189, 248, 0.8);
+  transform: translateY(-1px);
+}
+
+/* Row wrapper for vertical centering */
+.rundown-item-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%; /* make sure it spans the card */
+}
+
+.rundown-item-main {
+  font-size: 0.9rem;
+  font-weight: 500;
+  flex: 1;
+}
+
+.rundown-item-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rundown-item-meta {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  opacity: 0.9;
+}
+
+/* Status pill */
+.rundown-item-status-pill {
+  padding: 1px 6px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.rundown-item-status-pill.status-pending {
+  background: #334155;
+  color: #e5e7eb;
+}
+
+.rundown-item-status-pill.status-live {
+  background: #dc2626;
+  color: #f9fafb;
+}
+
+.rundown-item-status-pill.status-done {
+  background: #16a34a;
+  color: #f9fafb;
+}
+
+.rundown-item-status-pill.status-skipped {
+  background: #a855f7;
+  color: #f9fafb;
+}
+
+/* Timer */
+.rundown-item-timer {
+  font-variant-numeric: tabular-nums;
+  opacity: 0.9;
+}
+
+/* PROGRESS BAR – make this loud and obvious */
+.rundown-item-progress {
+  /* NEW: ensure it sits UNDER the row, full width */
+  display: block;
+  width: 100%;
+
+  margin-top: 6px;
+  height: 8px;                        /* CHUNKY */
+  border-radius: 999px;
+  background: #020617;                /* dark track */
+  overflow: hidden;
+}
+
+.rundown-item-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #22c55e, #eab308);
+  box-shadow: 0 0 8px rgba(34, 197, 94, 0.9);
+  transition: width 0.15s linear, background 0.15s ease;
+}
+
+.rundown-item-progress-bar.overrun {
+  background: #dc2626;
+  box-shadow: 0 0 10px rgba(220, 38, 38, 0.9);
+}
+
+/* Footer bar: Up Next + Over/Under in one line */
+.rundown-footer-bar {
+  margin-top: 10px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: #020617;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.rundown-up-next {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.rundown-up-next .label {
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.65rem;
+  color: #38bdf8;
+}
+
+.rundown-up-next .title {
+  font-weight: 500;
+}
+
+.rundown-up-next .duration,
+.rundown-up-next .type {
+  opacity: 0.8;
+}
+
+.rundown-overunder {
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.9;
+}

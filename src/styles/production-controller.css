@@ -1,0 +1,4002 @@
+/* src/styles/production-controller.css */
+
+/* =======================================
+   ROOT LAYOUT / SHELL
+   ======================================= */
+
+.pc-root {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: #05050a;
+  color: #f5f5f5;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    "Segoe UI", sans-serif;
+}
+
+/* Header ---------------------------------------------------- */
+
+.pc-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.6fr) minmax(0, 1.2fr);
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.pc-header-left,
+.pc-header-center,
+.pc-header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pc-header-center {
+  justify-content: center;
+}
+
+.pc-header-right {
+  justify-content: flex-end;
+}
+
+/* Mode toggle */
+
+.pc-mode-toggle {
+  display: inline-flex;
+  gap: 6px;
+}
+
+.pc-mode-toggle button {
+  border: 0;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  color: inherit;
+  font-size: 12px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  transition:
+    background 150ms ease,
+    transform 120ms ease,
+    box-shadow 120ms ease;
+}
+
+.pc-mode-toggle button:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.pc-mode-toggle button.is-active {
+  background: rgba(0, 200, 255, 0.3);
+  box-shadow: 0 0 10px rgba(0, 200, 255, 0.4);
+  transform: translateY(-1px);
+}
+
+/* Theme toggle */
+
+.pc-theme-toggle {
+  display: inline-flex;
+  gap: 4px;
+  margin-right: 8px;
+}
+
+.pc-theme-toggle button {
+  border: 0;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  color: inherit;
+  font-size: 11px;
+  cursor: pointer;
+  opacity: 0.75;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  transition:
+    background 140ms ease,
+    opacity 140ms ease,
+    transform 120ms ease;
+}
+
+.pc-theme-toggle button:hover {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.pc-theme-toggle button.is-active {
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
+/* =======================================
+   MAIN 3-COLUMN CONTROLLER LAYOUT
+   ======================================= */
+
+.pc-layout {
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.4fr) minmax(0, 1.1fr);
+  gap: 10px;
+  padding: 10px;
+  overflow: hidden;
+}
+
+.pc-column {
+  display: grid;
+  grid-auto-rows: minmax(120px, auto);
+  gap: 8px;
+  overflow-y: auto;
+  padding-right: 3px; /* keep scrollbar off content */
+}
+
+/* Panels ---------------------------------------------------- */
+
+.pc-panel {
+  background: radial-gradient(circle at top left, #181824 0, #090912 55%);
+  border-radius: 10px;
+  padding: 6px;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.03);
+  overflow: hidden;
+  transition:
+    min-height 200ms ease,
+    box-shadow 150ms ease,
+    transform 150ms ease;
+}
+
+.pc-panel:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+}
+
+.pc-panel-default {
+  min-height: 150px;
+}
+
+.pc-panel-tall {
+  min-height: 260px;
+  grid-row: span 2;
+}
+
+.pc-panel-monitor {
+  min-height: 340px;
+  grid-row: span 3;
+}
+
+.pc-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  margin-bottom: 4px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.8;
+}
+
+.pc-panel-body {
+  width: 100%;
+  height: 100%;
+}
+
+/* Responsive ------------------------------------------------ */
+
+@media (max-width: 1200px) {
+  .pc-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr) minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .pc-layout {
+    grid-template-columns: minmax(0, 1fr);
+    grid-auto-rows: auto;
+    overflow-y: auto;
+  }
+
+  .pc-column {
+    max-height: unset;
+  }
+}
+
+/* =======================================
+   RUNDOWN PANEL (LIVE CONTROLLER)
+   ======================================= */
+
+.rundown-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 100%;
+}
+
+/* Header */
+
+.rundown-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.rundown-header-main {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rundown-title {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.rundown-template-button {
+  border: 0;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  color: inherit;
+  font-size: 11px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.rundown-template-button:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.rundown-header-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.rundown-timing {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-size: 10px;
+  line-height: 1.2;
+  opacity: 0.8;
+}
+
+.rundown-timing span.over {
+  color: #f97373;
+}
+
+.rundown-timing span.under {
+  color: #4ade80;
+}
+
+.rundown-auto-button,
+.rundown-next-button,
+.rundown-skip-button {
+  border: 0;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  background: rgba(255, 255, 255, 0.06);
+  color: inherit;
+}
+
+.rundown-auto-button.is-active {
+  background: rgba(34, 197, 94, 0.25);
+  box-shadow: 0 0 12px rgba(34, 197, 94, 0.5);
+}
+
+.rundown-next-button {
+  background: rgba(59, 130, 246, 0.25);
+}
+
+.rundown-skip-button {
+  background: rgba(148, 163, 184, 0.25);
+}
+
+/* Live strip */
+
+.rundown-live-strip {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.8fr) auto;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  background: rgba(15, 23, 42, 0.8);
+}
+
+.rundown-live-main-title {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.rundown-live-sub {
+  font-size: 11px;
+  opacity: 0.8;
+}
+
+.rundown-live-status-pills {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+}
+
+/* Simple pill styling used all over */
+
+.rundown-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border: 1px solid rgba(148, 163, 184, 0.6);
+  color: rgba(226, 232, 240, 0.9);
+}
+
+.pill-live {
+  border-color: rgba(34, 197, 94, 0.9);
+  color: #bbf7d0;
+}
+
+/* Groups / items list */
+
+.rundown-groups {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 4px;
+  margin: 4px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.rundown-group {
+  border-radius: 6px;
+  background: rgba(15, 23, 42, 0.6);
+  padding: 4px 6px;
+}
+
+.rundown-group-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.rundown-group-title {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.8;
+}
+
+.rundown-group-items {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.rundown-group-selected {
+  box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.8);
+  background: rgba(15, 23, 42, 0.9);
+}
+
+.rundown-item-current {
+  box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.9);
+}
+
+/* Individual items */
+
+.rundown-item {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) auto;
+  gap: 4px;
+  align-items: center;
+  padding: 4px 6px;
+  border-radius: 4px;
+  background: rgba(15, 23, 42, 0.8);
+  cursor: pointer;
+  transition:
+    background 120ms ease,
+    transform 100ms ease;
+}
+
+.rundown-item:hover {
+  background: rgba(30, 64, 175, 0.75);
+  transform: translateY(-1px);
+}
+
+.rundown-item-main {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.rundown-item-title {
+  font-size: 11px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rundown-item-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  justify-content: flex-end;
+}
+
+.rundown-item-status {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.7;
+}
+
+/* Status colouring */
+
+.rundown-item.status-live {
+  background: rgba(22, 163, 74, 0.22);
+  box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.85);
+}
+
+.rundown-item.status-done {
+  opacity: 0.6;
+}
+
+.rundown-item.status-skipped {
+  opacity: 0.5;
+}
+
+.rundown-item.status-skipped .rundown-item-title {
+  text-decoration: line-through;
+}
+
+/* Scene mapping footer pills (single row, non-dropdown) */
+
+.rundown-scene-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-top: 4px;
+  border-top: 1px solid rgba(148, 163, 184, 0.35);
+}
+
+.rundown-scene-footer-pills {
+  display: inline-flex;
+  flex-wrap: nowrap; /* single row */
+  gap: 6px;
+  overflow-x: auto;
+}
+
+.routing-pill {
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 10px;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+.routing-pill-unmapped {
+  background: rgba(127, 29, 29, 0.35);
+  border-color: rgba(190, 50, 50, 0.7);
+  opacity: 0.65;
+}
+
+.routing-pill-mapped {
+  background: rgba(22, 163, 74, 0.28);
+  border-color: rgba(22, 163, 74, 0.8);
+  box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.45);
+  opacity: 1;
+}
+
+/* Dropdown list that appears under an item when a pill is clicked */
+
+.rundown-item-scene-picker {
+  margin-top: 4px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* =======================================
+   RUNDOWN EDITOR OVERLAY
+   ======================================= */
+
+/* Shell / backdrop */
+
+.pc-editor-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  pointer-events: none;
+}
+
+.pc-editor-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+  pointer-events: auto;
+}
+
+/* Slide-in panel */
+
+.pc-editor-panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(1200px, 100%);
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  background:
+    radial-gradient(circle at top left, rgba(0, 255, 204, 0.12), transparent 55%),
+    radial-gradient(circle at bottom right, rgba(0, 200, 255, 0.1), transparent 55%),
+    rgba(4, 7, 16, 0.98);
+  border-left: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    -20px 0 50px rgba(0, 0, 0, 0.85),
+    0 0 0 1px rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(20px);
+  color: #f9fbff;
+  font-size: 13px;
+}
+
+/* Header */
+
+.pc-editor-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.pc-editor-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pc-editor-title {
+  font-size: 15px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #f9fbff;
+}
+
+.pc-editor-subtitle {
+  font-size: 11px;
+  color: rgba(210, 222, 255, 0.72);
+}
+
+.pc-editor-header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: rgba(200, 214, 255, 0.75);
+}
+
+.pc-editor-title-input {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  padding: 4px 8px;
+  color: #f5f7ff;
+  font-size: 13px;
+  width: 260px;
+}
+
+.pc-editor-close {
+  background: #222635;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  padding: 6px 16px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+}
+
+/* Body layout: palette / canvas / inspector */
+
+.pc-editor-body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+.pc-editor-pane {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 14px;
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+
+.pc-editor-pane:last-child {
+  border-right: none;
+}
+
+.pc-editor-pane-palette {
+  width: 260px;
+}
+
+.pc-editor-pane-canvas {
+  flex: 1.4;
+  overflow-y: auto;
+}
+
+.pc-editor-pane-inspector {
+  width: 320px;
+}
+
+/* Pane headings */
+
+.pc-editor-pane-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+}
+
+.pc-editor-pane-title {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #f4f6ff;
+}
+
+.pc-editor-pane-subtitle {
+  font-size: 11px;
+  color: rgba(195, 210, 255, 0.7);
+}
+
+/* Palette cards */
+
+.pc-editor-palette-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+}
+
+.pc-editor-palette-card {
+  border-radius: 10px;
+  padding: 8px 10px;
+  background: rgba(6, 9, 24, 0.95);
+  border: 1px solid rgba(137, 190, 255, 0.4);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  transition:
+    background 0.12s ease-out,
+    border-color 0.12s ease-out,
+    transform 0.12s ease-out,
+    box-shadow 0.12s ease-out;
+}
+
+.pc-editor-palette-card:hover {
+  background: radial-gradient(
+      circle at top left,
+      rgba(0, 255, 204, 0.25),
+      rgba(5, 8, 20, 0.96)
+    );
+  border-color: rgba(185, 230, 255, 0.9);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6);
+}
+
+.pc-editor-palette-title {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.pc-editor-palette-tagline {
+  font-size: 11px;
+  opacity: 0.8;
+}
+
+/* Canvas: groups and items */
+
+.pc-editor-canvas-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+}
+
+/* Group container */
+
+.pc-editor-group {
+  padding: 8px 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(117, 208, 255, 0.4);
+  background:
+    radial-gradient(circle at top left, rgba(0, 255, 204, 0.18), transparent 60%),
+    rgba(9, 12, 25, 0.96);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.7);
+}
+
+.pc-editor-group-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 0 4px 4px 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  margin-bottom: 4px;
+}
+
+.pc-editor-group-title {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.pc-editor-group-count {
+  font-size: 11px;
+  opacity: 0.7;
+}
+
+/* Shared time rail + rows */
+
+.pc-editor-group-items {
+  position: relative;
+  margin-top: 4px;
+  padding-left: 90px; /* time column + rail */
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pc-editor-group-rail {
+  position: absolute;
+  left: 80px; /* matches time column */
+  top: 2px;
+  bottom: 2px;
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.25),
+    rgba(255, 255, 255, 0.08)
+  );
+  pointer-events: none;
+}
+
+/* Each row sits on the rail */
+
+.pc-editor-item-row {
+  display: grid;
+  grid-template-columns: 80px 1fr; /* time column + card */
+  align-items: stretch;
+  gap: 8px;
+  cursor: pointer;
+  padding: 6px 10px; /* breathing room inside glass panel */
+}
+
+.pc-editor-item-row.is-selected .pc-editor-item-card {
+  border-color: #5deaff;
+  background: radial-gradient(circle at right, #132743 0, #05070d 55%);
+}
+
+/* Time cell */
+
+.pc-editor-time-rail {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 10px;
+  font-size: 11px;
+  color: #9ba5d1;
+}
+
+.pc-editor-time-rail::after {
+  content: "";
+  position: absolute;
+  right: -3px;
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: #5deaff;
+  box-shadow: 0 0 6px rgba(93, 234, 255, 0.8);
+}
+
+.pc-editor-time-label {
+  position: relative;
+  z-index: 1;
+}
+
+/* Card itself */
+
+.pc-editor-item-card {
+  border-radius: 10px;
+  padding: 6px 8px;
+  background: rgba(10, 10, 18, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(16px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: border-color 0.1s ease, background 0.1s ease;
+}
+
+.pc-editor-item-card:hover {
+  border-color: rgba(93, 234, 255, 0.5);
+}
+
+.pc-editor-item-title {
+  font-size: 13px;
+}
+
+.pc-editor-item-meta {
+  display: flex;
+  gap: 6px;
+  font-size: 11px;
+  opacity: 0.8;
+}
+
+.pc-editor-item-type {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* Add group card */
+
+.pc-editor-add-group {
+  margin-top: 10px;
+  border-radius: 10px;
+  padding: 10px;
+  border: 1px dashed rgba(0, 255, 204, 0.6);
+  color: rgba(230, 235, 255, 0.9);
+  text-align: center;
+  font-size: 12px;
+  cursor: pointer;
+  background: rgba(0, 15, 25, 0.9);
+  transition:
+    border-color 0.12s ease-out,
+    background 0.12s ease-out,
+    transform 0.12s ease-out,
+    opacity 0.15s;
+}
+
+.pc-editor-add-group:hover {
+  background: radial-gradient(
+      circle at top,
+      rgba(0, 255, 204, 0.3),
+      rgba(0, 8, 15, 0.9)
+    );
+  transform: translateY(-1px);
+}
+
+/* Inspector panel */
+
+.pc-inspector-panel {
+  margin-bottom: 18px;
+  padding: 14px 16px 16px;
+  border-radius: 10px;
+  background: rgba(10, 10, 18, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(16px);
+}
+
+.pc-inspector-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 6px;
+}
+
+.pc-inspector-card-title {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.pc-inspector-card-subtitle {
+  font-size: 11px;
+  opacity: 0.75;
+}
+
+.pc-inspector-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  font-size: 12px;
+}
+
+.pc-inspector-label {
+  opacity: 0.8;
+}
+
+/* Inputs in inspector / routing */
+
+.pc-inspector-input,
+.pc-inspector-select,
+.pc-editor-routing-select,
+.pc-actions-input {
+  width: 100%;
+  padding: 4px 6px;
+  font-size: 12px;
+  border-radius: 6px;
+  border: 1px solid rgba(150, 170, 210, 0.65);
+  background: rgba(4, 7, 18, 0.98);
+  color: #f3f7ff;
+}
+
+.pc-inspector-input:focus,
+.pc-inspector-select:focus,
+.pc-editor-routing-select:focus,
+.pc-actions-input:focus {
+  outline: none;
+  border-color: #5deaff;
+  box-shadow: 0 0 0 1px rgba(93, 234, 255, 0.5);
+}
+
+/* Routing table in inspector */
+
+.pc-editor-routing-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.pc-editor-routing-table th,
+.pc-editor-routing-table td {
+  padding: 4px 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.pc-editor-routing-table th {
+  text-align: left;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  opacity: 0.75;
+}
+
+.pc-editor-routing-role {
+  opacity: 0.85;
+}
+
+/* Actions editor (rows + add buttons) */
+
+.pc-actions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pc-actions-row {
+  display: grid;
+  grid-template-columns: 90px minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: 6px;
+  align-items: center;
+}
+
+.pc-actions-kind {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.8;
+}
+
+.pc-actions-add {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pc-actions-add-title {
+  font-size: 0.78rem;
+  opacity: 0.7;
+  margin-bottom: 4px;
+}
+
+.pc-actions-add-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 8px;
+}
+
+.pc-action-add-button {
+  padding: 6px 8px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  font-size: 0.78rem;
+  color: #f0f4ff;
+  cursor: pointer;
+}
+
+.pc-action-add-button:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* Scrollbars for canvas */
+
+.pc-editor-pane-canvas::-webkit-scrollbar {
+  width: 6px;
+}
+
+.pc-editor-pane-canvas::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.pc-editor-pane-canvas::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 999px;
+}
+
+.pc-editor-pane-canvas::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.pc-editor-pane-canvas {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+/* =========================================================
+   RUNDOWN EDITOR – BLACK GLASS LAYOUT (FIXED)
+   ========================================================= */
+
+/* Make the center pane actually behave like a layout container */
+.pc-editor-pane-canvas {
+  display: flex;
+  flex-direction: column;
+  align-items: center;       /* centre the group panel */
+}
+
+/* Let the groups column span reasonably wide */
+.pc-editor-canvas-groups {
+  width: 100%;
+  max-width: 1040px;
+  margin: 0 auto;
+  padding-right: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Black-glass group card */
+.pc-editor-group {
+  width: 100%;               /* <<< this is the bit you were missing */
+  max-width: 860px;
+  margin: 0 auto;
+  background: rgba(6, 10, 22, 0.96);
+  border-radius: 14px;
+  border: 1px solid rgba(120, 200, 255, 0.45);
+  box-shadow: 0 22px 40px rgba(0, 0, 0, 0.9);
+}
+
+/* Header stays compact */
+.pc-editor-group-header {
+  padding: 4px 10px 6px 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  margin-bottom: 2px;
+}
+
+/* Items: ditch the old padding-left rail tricks */
+.pc-editor-group-items {
+  margin-top: 4px;
+  padding: 8px 10px 12px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: static;
+}
+
+/* Row layout: [time] [rail+dot] [card] */
+.pc-editor-item-row {
+  display: grid;
+  grid-template-columns: 56px 18px minmax(0, 1fr);
+  align-items: center;
+  column-gap: 10px;
+  cursor: pointer;
+}
+
+/* Time label column */
+.pc-editor-time-label-cell {
+  font-size: 12px;
+  color: #9ba5d1;
+  text-align: right;
+  padding-right: 2px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Rail + dot column */
+.pc-editor-time-line-cell {
+  position: relative;
+  width: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pc-editor-time-line-cell::before {
+  content: "";
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  left: 50%;
+  width: 1px;
+  transform: translateX(-50%);
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.22),
+    rgba(255, 255, 255, 0.06)
+  );
+}
+
+.pc-editor-time-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: #5deaff;
+  box-shadow: 0 0 8px rgba(93, 234, 255, 0.9);
+}
+
+/* Card column – now full-width inside that third grid cell */
+.pc-editor-item-card {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: radial-gradient(
+      circle at top left,
+      rgba(0, 0, 0, 0.45),
+      rgba(0, 0, 0, 0.9)
+    );
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  transition:
+    border-color 120ms ease,
+    background 120ms ease,
+    transform 100ms ease;
+}
+
+.pc-editor-item-card:hover {
+  border-color: rgba(93, 234, 255, 0.6);
+  transform: translateY(-1px);
+}
+
+/* Selected row highlight */
+.pc-editor-item-row {
+  display: grid;
+  grid-template-columns: 56px 18px minmax(0, 1fr);
+  align-items: center;
+  column-gap: 10px;
+  cursor: pointer;
+  width: 100%;           /* <<< force row to stretch with the group */
+  box-sizing: border-box;
+}
+
+
+/* Card text */
+.pc-editor-item-title {
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pc-editor-item-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  opacity: 0.8;
+}
+
+.pc-editor-item-type {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.7;
+}
+
+.pc-editor-item-duration {
+  opacity: 0.75;
+}
+
+/* =======================================
+   RUNDOWN EDITOR – GLASS PANEL POLISH
+   ======================================= */
+
+/* Big glass panel behind the timeline column */
+.pc-editor-pane-canvas {
+  position: relative;
+  padding: 12px 18px;
+  flex: 1.4;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.pc-editor-pane-canvas::before {
+  content: "";
+  position: absolute;
+  inset: 6px 8px;
+  border-radius: 16px;
+  background: radial-gradient(
+      circle at top left,
+      rgba(0, 255, 204, 0.12),
+      transparent 55%
+    ),
+    radial-gradient(
+      circle at bottom right,
+      rgba(0, 180, 255, 0.16),
+      transparent 60%
+    ),
+    rgba(3, 6, 15, 0.96);
+  border: 1px solid rgba(148, 197, 255, 0.35);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.95);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Lift header + groups above the glass panel */
+.pc-editor-canvas-header,
+.pc-editor-canvas-groups {
+  position: relative;
+  z-index: 1;
+}
+
+/* Groups as lightweight sections inside the glass panel */
+.pc-editor-group {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 4px 2px 8px;
+}
+
+.pc-editor-group-header {
+  padding: 2px 6px 4px;
+  margin-bottom: 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.pc-editor-group-title {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.pc-editor-group-count {
+  font-size: 11px;
+  opacity: 0.7;
+}
+
+/* Slight indent so the rail + cards don’t touch the panel edge */
+.pc-editor-group-items {
+  padding: 2px 4px 6px;
+}
+
+/* Tighten the rows a bit */
+.pc-editor-item-row {
+  padding: 2px 0;
+}
+
+/* Minor pill-style meta to read cleaner */
+.pc-editor-item-meta {
+  gap: 4px;
+}
+
+.pc-editor-item-type,
+.pc-editor-item-duration {
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.4);
+}
+
+/* =======================================
+   Card Palette – coloured left stripes
+   ======================================= */
+
+.pc-editor-palette-card {
+  position: relative;
+  padding-left: 16px; /* space for stripe */
+  overflow: hidden;
+}
+
+/* Base stripe */
+.pc-editor-palette-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 4px;
+  border-radius: 999px;
+  background: var(--pc-palette-accent, rgba(148, 163, 184, 0.8));
+  box-shadow: 0 0 10px
+    color-mix(in srgb, var(--pc-palette-accent, #94a3b8) 65%, transparent);
+}
+
+/* Per-type accents */
+.pc-editor-type-segment {
+  --pc-palette-accent: #38bdf8; /* cyan / main content */
+}
+
+.pc-editor-type-ad {
+  --pc-palette-accent: #f97373; /* red / ads */
+}
+
+.pc-editor-type-break {
+  --pc-palette-accent: #a855f7; /* purple / BRB */
+}
+
+.pc-editor-type-vt {
+  --pc-palette-accent: #facc15; /* yellow / VT */
+}
+
+.pc-editor-type-chat {
+  --pc-palette-accent: #22c55e; /* green / chat */
+}
+
+.pc-editor-type-event {
+  --pc-palette-accent: #e5e7eb; /* white / triggers */
+}
+
+/* =======================================
+   Inspector – field + button polish
+   ======================================= */
+
+.pc-inspector-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Labels */
+.pc-inspector-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 6px;
+  font-size: 12px;
+}
+
+.pc-inspector-field label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.78;
+}
+
+/* Inputs/selects */
+.pc-inspector-panel input,
+.pc-inspector-panel select {
+  width: 100%;
+  padding: 5px 7px;
+  font-size: 12px;
+  border-radius: 7px;
+  border: 1px solid rgba(148, 163, 184, 0.6);
+  background: rgba(5, 9, 20, 0.98);
+  color: #e5e7eb;
+  outline: none;
+  transition:
+    border-color 120ms ease,
+    box-shadow 120ms ease,
+    background 120ms ease;
+}
+
+.pc-inspector-panel input:focus,
+.pc-inspector-panel select:focus {
+  border-color: #5deaff;
+  box-shadow: 0 0 0 1px rgba(93, 234, 255, 0.5);
+  background: rgba(7, 12, 28, 0.98);
+}
+
+/* Move / delete buttons */
+.pc-inspector-move-btns button,
+.pc-inspector-delete-btn {
+  padding: 5px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.6);
+  background: rgba(15, 23, 42, 0.96);
+  color: #e5e7eb;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition:
+    background 120ms ease,
+    border-color 120ms ease,
+    transform 100ms ease,
+    box-shadow 120ms ease;
+}
+
+.pc-inspector-move-btns button:hover:not(:disabled),
+.pc-inspector-delete-btn:hover:not(:disabled) {
+  background: rgba(37, 99, 235, 0.3);
+  border-color: rgba(129, 186, 255, 0.85);
+  box-shadow: 0 0 0 1px rgba(129, 186, 255, 0.4);
+  transform: translateY(-1px);
+}
+
+.pc-inspector-delete-btn {
+  border-color: rgba(248, 113, 113, 0.9);
+  background: rgba(127, 29, 29, 0.6);
+  color: #fecaca;
+}
+
+.pc-inspector-delete-btn:hover:not(:disabled) {
+  background: rgba(185, 28, 28, 0.85);
+}
+
+/* Actions “add” buttons */
+.pc-action-add-button {
+  border-radius: 999px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* =======================================
+   Add Group CTA card
+   ======================================= */
+
+/* Use the same width as other groups, but no group chrome */
+.pc-editor-group.pc-editor-group-add {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  margin-top: 18px;
+}
+
+/* Make the inner header look like a clickable card */
+.pc-editor-group-add-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px dashed rgba(56, 189, 248, 0.8);
+  background: radial-gradient(
+      circle at top left,
+      rgba(34, 211, 238, 0.16),
+      transparent 55%
+    ),
+    rgba(6, 10, 22, 0.96);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.85);
+  cursor: pointer;
+  transition:
+    background 140ms ease,
+    border-color 140ms ease,
+    box-shadow 140ms ease,
+    transform 100ms ease;
+}
+
+/* Hover state to match palette buttons */
+.pc-editor-group-add-header:hover {
+  border-color: rgba(125, 211, 252, 1);
+  background: radial-gradient(
+      circle at top left,
+      rgba(45, 212, 191, 0.28),
+      rgba(6, 10, 22, 0.98)
+    );
+  box-shadow:
+    0 0 0 1px rgba(56, 189, 248, 0.35),
+    0 22px 45px rgba(0, 0, 0, 0.95);
+  transform: translateY(-1px);
+}
+
+/* Text styling */
+.pc-editor-group-add-label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #e0f2fe;
+}
+
+.pc-editor-group-add-subtitle {
+  font-size: 11px;
+  opacity: 0.8;
+  color: #cbd5f5;
+  text-align: right;
+}
+
+/* =======================================
+   Canvas header hierarchy
+   ======================================= */
+
+.pc-editor-canvas-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 0 8px 6px;
+  margin-bottom: 4px;
+}
+
+.pc-editor-canvas-title {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.pc-editor-canvas-total {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(250, 204, 21, 0.8); /* yellow label */
+}
+
+.pc-editor-canvas-total-value {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  color: #facc15; /* brighter yellow number */
+}
+
+/* Inspector heading */
+.pc-editor-pane-inspector > h4 {
+  margin: 0 0 8px;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  opacity: 0.85;
+}
+
+/* =======================================
+   Scene Routing inspector panel
+   ======================================= */
+
+.pc-inspector-panel-routing {
+  margin-bottom: 10px;
+}
+
+.pc-routing-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 2px 0 4px;
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.pc-routing-header-left {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.pc-routing-chevron {
+  display: inline-block;
+  width: 10px;
+  transform-origin: center;
+  transition: transform 120ms ease;
+}
+
+.pc-routing-chevron.is-open {
+  transform: rotate(90deg);
+}
+
+.pc-routing-title {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.8;
+}
+
+.pc-routing-header-right {
+  font-size: 11px;
+  opacity: 0.8;
+}
+
+.pc-editor-routing-section {
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px solid rgba(148, 163, 184, 0.3);
+}
+
+.pc-scene-routing-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+}
+
+.pc-scene-routing-table th,
+.pc-scene-routing-table td {
+  padding: 4px 3px;
+  border-bottom: 1px solid rgba(30, 41, 59, 0.8);
+}
+
+.pc-scene-routing-table th {
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.7;
+}
+
+.pc-routing-status-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+}
+
+.pc-routing-status-ok {
+  background: #22c55e;
+  box-shadow: 0 0 6px rgba(34, 197, 94, 0.8);
+}
+
+.pc-routing-status-unmapped {
+  background: #f97373;
+  box-shadow: 0 0 6px rgba(248, 113, 113, 0.8);
+}
+
+.pc-routing-status-missing {
+  background: #facc15;
+  box-shadow: 0 0 6px rgba(250, 204, 21, 0.85);
+}
+
+.pc-routing-warning {
+  margin-top: 6px;
+  font-size: 11px;
+  color: #fee2e2;
+}
+
+/* =========================================================
+   RUNDOWN PANEL – PRODUCTION GRADE LAYOUT
+   (purely visual – no behavioural changes)
+   ========================================================= */
+
+/* ----- Generic pills used in RundownPanel ----- */
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border: 1px solid rgba(148, 163, 184, 0.6);
+  color: rgba(226, 232, 240, 0.9);
+  white-space: nowrap;
+}
+
+.pill-type {
+  background: rgba(15, 23, 42, 0.95);
+}
+
+.pill-live {
+  border-color: rgba(34, 197, 94, 0.9);
+  color: #bbf7d0;
+}
+
+/* Keep backwards-compat with older progress CSS from theme */
+.rundown-item-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #22c55e, #eab308);
+  box-shadow: 0 0 8px rgba(34, 197, 94, 0.9);
+  transition: width 0.15s linear, background 0.15s ease;
+}
+
+/* =========================================================
+   HEADER BAR
+   ========================================================= */
+
+.rundown-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 100%;
+}
+
+.rundown-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.35);
+}
+
+.rundown-header-main {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.rundown-title {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.rundown-template-button {
+  border: 0;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.9);
+  color: rgba(226, 232, 240, 0.9);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  border: 1px solid rgba(148, 163, 184, 0.5);
+}
+
+.rundown-template-button:hover {
+  background: rgba(30, 64, 175, 0.85);
+  border-color: rgba(129, 186, 255, 0.9);
+}
+
+.rundown-header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rundown-timing {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-size: 10px;
+  line-height: 1.2;
+  opacity: 0.9;
+}
+
+.rundown-timing-row {
+  display: flex;
+  gap: 4px;
+}
+
+.rundown-timing-label {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.7;
+}
+
+.rundown-timing-value {
+  font-variant-numeric: tabular-nums;
+}
+
+.rundown-timing-row.over .rundown-timing-value {
+  color: #f97373;
+}
+
+.rundown-timing-row.under .rundown-timing-value {
+  color: #4ade80;
+}
+
+/* Header buttons */
+
+.rundown-start-button,
+.rundown-auto-button,
+.rundown-next-button,
+.rundown-skip-button {
+  border: 0;
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 11px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  background: rgba(15, 23, 42, 0.96);
+  color: rgba(226, 232, 240, 0.96);
+  border: 1px solid rgba(148, 163, 184, 0.7);
+  transition:
+    background 140ms ease,
+    box-shadow 140ms ease,
+    transform 110ms ease,
+    border-color 140ms ease;
+}
+
+.rundown-start-button {
+  background: rgba(34, 197, 94, 0.25);
+  border-color: rgba(34, 197, 94, 0.8);
+  font-weight: 600;
+}
+
+.rundown-start-button:disabled {
+  opacity: 0.5;
+  cursor: default;
+  box-shadow: none;
+}
+
+.rundown-next-button {
+  background: rgba(59, 130, 246, 0.25);
+  border-color: rgba(59, 130, 246, 0.8);
+}
+
+.rundown-skip-button {
+  background: rgba(148, 163, 184, 0.2);
+}
+
+.rundown-auto-button.is-active {
+  background: rgba(34, 197, 94, 0.25);
+  box-shadow: 0 0 12px rgba(34, 197, 94, 0.55);
+}
+
+/* =========================================================
+   LIVE "NOW" STRIP
+   ========================================================= */
+
+.rundown-live-strip {
+  display: grid;
+  grid-template-areas:
+    "main meta actions"
+    "progress progress progress";
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 2fr) auto;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: linear-gradient(
+    90deg,
+    rgba(15, 23, 42, 0.95),
+    rgba(15, 23, 42, 0.9)
+  );
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+}
+
+.rundown-live-main {
+  grid-area: main;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.rundown-live-label {
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: #ef4444;
+  color: #fee2e2;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.rundown-live-title {
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rundown-live-meta {
+  grid-area: meta;
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  justify-content: flex-start;
+}
+
+.rundown-live-progress {
+  grid-area: progress;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.9);
+  overflow: hidden;
+}
+
+.rundown-live-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #22c55e, #eab308);
+  box-shadow: 0 0 10px rgba(34, 197, 94, 0.9);
+  transition: width 0.18s linear;
+}
+
+.rundown-live-actions {
+  grid-area: actions;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.rundown-live-actions .pro-button.live {
+  background: #b91c1c;
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  box-shadow: 0 0 18px rgba(248, 113, 113, 0.7);
+}
+
+/* =========================================================
+   GROUPS AND ITEMS
+   ========================================================= */
+
+.rundown-groups {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 4px;
+  margin: 4px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.rundown-group {
+  border-radius: 6px;
+  background: rgba(15, 23, 42, 0.7);
+  padding: 5px 6px;
+}
+
+.rundown-group-selected {
+  box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.9);
+  background: rgba(15, 23, 42, 0.95);
+}
+
+.rundown-group-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.rundown-group-title {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.8;
+}
+
+.rundown-group-items {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+/* item card */
+
+.rundown-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 5px 7px;
+  border-radius: 5px;
+  background: rgba(15, 23, 42, 0.85);
+  cursor: pointer;
+  transition:
+    background 120ms ease,
+    transform 100ms ease,
+    box-shadow 120ms ease;
+}
+
+.rundown-item:hover {
+  background: rgba(30, 64, 175, 0.85);
+  transform: translateY(-1px);
+}
+
+.rundown-item.status-live {
+  background: rgba(22, 163, 74, 0.25);
+  box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.9);
+}
+
+.rundown-item.status-done {
+  opacity: 0.6;
+}
+
+.rundown-item.status-skipped {
+  opacity: 0.6;
+}
+
+.rundown-item.status-skipped .rundown-item-title {
+  text-decoration: line-through;
+}
+
+.rundown-item-current {
+  box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.95);
+}
+
+/* item contents */
+
+.rundown-item-main {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.rundown-item-title {
+  font-size: 11px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rundown-item-meta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+  font-size: 10px;
+}
+
+.rundown-item-status {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.7;
+}
+
+/* per-item progress bar */
+
+.rundown-item-progress {
+  width: 100%;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.9);
+  overflow: hidden;
+}
+
+/* =========================================================
+   FOOTER / QUICK ADD (read-only hint)
+   ========================================================= */
+
+.rundown-footer {
+  border-top: 1px solid rgba(148, 163, 184, 0.35);
+  padding-top: 6px;
+  margin-top: 2px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.rundown-quickadd {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.rundown-quickadd-chip {
+  font-size: 10px;
+  border-radius: 999px;
+  padding: 3px 8px;
+  border: 1px solid rgba(148, 163, 184, 0.6);
+  background: rgba(15, 23, 42, 0.95);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+
+.rundown-quickadd-input {
+  flex: 1;
+  min-width: 0;
+  border-radius: 999px;
+  border: 1px dashed rgba(148, 163, 184, 0.6);
+  background: rgba(15, 23, 42, 0.7);
+  padding: 4px 10px;
+  font-size: 11px;
+  color: rgba(148, 163, 184, 0.9);
+}
+
+.rundown-routing-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.routing-types-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: nowrap;   /* keep them in a single line */
+  overflow-x: auto;
+}
+
+/* reuse existing .routing-pill-* colours but tighten typography */
+.routing-pill {
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.rundown-footer-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+/* =========================================================
+   CLEAN FOOTER — ONLY ROLE-MAPPING PILLS
+   ========================================================= */
+
+/* Wipe previous footer elements */
+.rundown-footer *:not(.rundown-routing-row):not(.routing-types-row):not(.routing-pill) {
+  display: none !important;
+}
+
+/* Footer container cleaned up */
+.rundown-footer {
+  padding: 6px 2px 2px 2px;
+  margin-top: 6px;
+  border-top: 1px solid rgba(148, 163, 184, 0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Routing row stays */
+.rundown-routing-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  padding: 2px 0;
+}
+
+/* Keep routing types in a single line */
+.routing-types-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow-x: auto;
+  flex-wrap: nowrap;
+}
+
+/* =========================================================
+   SQUARED-OFF CONTROL-LIGHT PILLS
+   ========================================================= */
+
+.routing-pill {
+  padding: 4px 10px;
+  border-radius: 6px;       /* square(ish) */
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: default;
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  background: rgba(15, 23, 42, 0.9);
+  color: rgba(226, 232, 240, 0.95);
+  transition:
+    background 0.15s ease,
+    box-shadow 0.15s ease,
+    border-color 0.15s ease;
+}
+
+/* Unmapped: dull red control light */
+.routing-pill-unmapped {
+  border-color: rgba(239, 68, 68, 0.7);
+  background: rgba(239, 68, 68, 0.15);
+}
+
+/* Mapped: bright green control light */
+.routing-pill-mapped {
+  border-color: rgba(34, 197, 94, 0.9);
+  background: rgba(34, 197, 94, 0.25);
+  box-shadow: 0 0 10px rgba(34, 197, 94, 0.6);
+  color: #d1fae5;
+}
+
+/* =========================================================
+   RUNDOWN – GLOSSY PILLS, LIVE BLINK, HEADER ROUTING ROW
+   ========================================================= */
+
+/* Global pill styling (used in live strip + item meta) */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 500;
+  border: 1px solid rgba(148, 163, 184, 0.7);
+  background: linear-gradient(
+    145deg,
+    rgba(15, 23, 42, 0.96),
+    rgba(30, 64, 175, 0.9)
+  );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 0 6px rgba(15, 23, 42, 0.9);
+  color: rgba(226, 232, 240, 0.94);
+}
+
+.pill-type {
+  background: linear-gradient(
+    145deg,
+    rgba(15, 23, 42, 0.96),
+    rgba(51, 65, 85, 0.95)
+  );
+}
+
+/* Live pill – glossy and animated */
+.pill-live {
+  border-color: rgba(34, 197, 94, 0.9);
+  background: linear-gradient(
+    145deg,
+    rgba(22, 163, 74, 0.35),
+    rgba(34, 197, 94, 0.9)
+  );
+  color: #ecfdf5;
+  box-shadow: 0 0 12px rgba(34, 197, 94, 0.8);
+  animation: rundown-live-pulse 1.1s ease-in-out infinite alternate;
+}
+
+/* NOW badge blinks as well */
+.rundown-live-label {
+  animation: rundown-live-pulse 1.1s ease-in-out infinite alternate;
+}
+
+@keyframes rundown-live-pulse {
+  0% {
+    transform: translateY(0);
+    opacity: 0.75;
+    box-shadow: 0 0 6px rgba(34, 197, 94, 0.4);
+  }
+  100% {
+    transform: translateY(-1px);
+    opacity: 1;
+    box-shadow: 0 0 14px rgba(34, 197, 94, 0.9);
+  }
+}
+
+/* Header routing row – between header and NOW strip */
+.rundown-header-routing {
+  margin: 4px 0 6px;
+  padding: 2px 0 4px;
+  border-top: 1px solid rgba(15, 23, 42, 0.9);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.9);
+}
+
+.rundown-header-routing .routing-types-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+}
+
+/* Squared-off control-light routing pills, with pip + icon */
+.routing-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 9px;
+  border-radius: 7px; /* rectangular not lozenges */
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border-width: 1px;
+  border-style: solid;
+  background: linear-gradient(
+    145deg,
+    rgba(15, 23, 42, 0.96),
+    rgba(15, 23, 42, 0.9)
+  );
+}
+
+.routing-pill-pip {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  margin-right: 5px;
+  background: rgba(248, 113, 113, 0.95);
+  box-shadow: 0 0 8px rgba(248, 113, 113, 0.9);
+}
+
+.routing-pill-icon {
+  font-size: 11px;
+  margin-right: 5px;
+  opacity: 0.9;
+}
+
+.routing-pill-label {
+  white-space: nowrap;
+}
+
+/* Unmapped = red pip, subtle border */
+.routing-pill-unmapped {
+  border-color: rgba(239, 68, 68, 0.8);
+}
+
+.routing-pill-unmapped .routing-pill-pip {
+  background: rgba(248, 113, 113, 0.95);
+  box-shadow: 0 0 8px rgba(248, 113, 113, 0.9);
+}
+
+/* Mapped = green pip + glow (once you start toggling this class) */
+.routing-pill-mapped {
+  border-color: rgba(34, 197, 94, 0.95);
+}
+
+.routing-pill-mapped .routing-pill-pip {
+  background: rgba(34, 197, 94, 1);
+  box-shadow: 0 0 10px rgba(34, 197, 94, 0.95);
+}
+
+/* Hide the old footer routing row – pills now live in the header */
+.rundown-footer .rundown-routing-row {
+  display: none;
+}
+
+/* =========================================================
+   RUNDOWN – HEADER CONTROLS + SQUARE PILLS + FOOTER MAPPING
+   ========================================================= */
+
+/* ---------- 1. Header layout & transport buttons ---------- */
+
+.rundown-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.rundown-header-main {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.rundown-header-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: nowrap;
+}
+
+/* keep timing block tight so buttons have room */
+.rundown-timing {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-size: 10px;
+  line-height: 1.15;
+}
+
+/* Base style for header control buttons */
+.rundown-start-button,
+.rundown-auto-button,
+.rundown-next-button,
+.rundown-skip-button {
+  flex-shrink: 0;
+  border-radius: 6px;          /* square-ish */
+  padding: 6px 14px;
+  border: 1px solid rgba(148, 163, 184, 0.8);
+  background: linear-gradient(
+    145deg,
+    rgba(15, 23, 42, 0.98),
+    rgba(30, 41, 59, 0.95)
+  );
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(226, 232, 240, 0.95);
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.08s ease,
+    border-color 0.15s ease;
+}
+
+.rundown-start-button:hover,
+.rundown-auto-button:hover,
+.rundown-next-button:hover,
+.rundown-skip-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 12px rgba(15, 23, 42, 0.9);
+}
+
+/* Start Show = green */
+.rundown-start-button {
+  background: linear-gradient(
+    145deg,
+    rgba(22, 163, 74, 0.5),
+    rgba(34, 197, 94, 0.95)
+  );
+  border-color: rgba(34, 197, 94, 0.95);
+  color: #ecfdf5;
+  box-shadow: 0 0 14px rgba(34, 197, 94, 0.8);
+}
+
+.rundown-start-button:disabled {
+  opacity: 0.5;
+  cursor: default;
+  box-shadow: none;
+}
+
+/* Auto toggle – reuse green when active, grey when idle */
+.rundown-auto-button {
+  background: linear-gradient(
+    145deg,
+    rgba(15, 23, 42, 0.98),
+    rgba(30, 41, 59, 0.95)
+  );
+}
+
+.rundown-auto-button.is-active {
+  background: linear-gradient(
+    145deg,
+    rgba(22, 163, 74, 0.5),
+    rgba(34, 197, 94, 0.95)
+  );
+  border-color: rgba(34, 197, 94, 0.95);
+  color: #ecfdf5;
+  box-shadow: 0 0 10px rgba(34, 197, 94, 0.9);
+}
+
+/* Next / Skip = neutral grey */
+.rundown-next-button,
+.rundown-skip-button {
+  background: linear-gradient(
+    145deg,
+    rgba(15, 23, 42, 0.98),
+    rgba(30, 41, 59, 0.95)
+  );
+  border-color: rgba(148, 163, 184, 0.9);
+}
+
+/* End Segment button in live strip – same shape as row buttons, but red */
+.rundown-live-actions .pro-button.live,
+.rundown-live-actions .end-segment-button {
+  border-radius: 6px;
+  padding: 6px 16px;
+  border: 1px solid rgba(248, 113, 113, 0.95);
+  background: linear-gradient(
+    145deg,
+    rgba(127, 29, 29, 0.9),
+    rgba(220, 38, 38, 0.98)
+  );
+  color: #fee2e2;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  box-shadow: 0 0 16px rgba(248, 113, 113, 0.9);
+}
+
+/* ---------- 2. Square pill style everywhere ---------- */
+
+.pill,
+.pill-type,
+.pill-live,
+.routing-pill,
+.rundown-scene-pill-mapped,
+.rundown-scene-pill-unmapped {
+  border-radius: 7px;          /* square-ish instead of capsules */
+  padding: 4px 10px;
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border-width: 1px;
+  border-style: solid;
+  background: linear-gradient(
+    145deg,
+    rgba(15, 23, 42, 0.96),
+    rgba(30, 41, 59, 0.96)
+  );
+  color: rgba(226, 232, 240, 0.95);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Live pill still gets the green glow + pulse */
+.pill-live {
+  border-color: rgba(34, 197, 94, 0.95);
+  background: linear-gradient(
+    145deg,
+    rgba(22, 163, 74, 0.6),
+    rgba(34, 197, 94, 0.98)
+  );
+  color: #ecfdf5;
+}
+
+/* Role mapping pill colour states */
+.routing-pill-unmapped {
+  border-color: rgba(239, 68, 68, 0.85);
+}
+
+.routing-pill-mapped {
+  border-color: rgba(34, 197, 94, 0.95);
+}
+
+/* Keep the status pip, kill the little icons */
+.routing-pill-pip {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: rgba(248, 113, 113, 0.95); /* red by default */
+  box-shadow: 0 0 8px rgba(248, 113, 113, 0.9);
+}
+
+.routing-pill-mapped .routing-pill-pip {
+  background: rgba(34, 197, 94, 1);
+  box-shadow: 0 0 10px rgba(34, 197, 94, 0.95);
+}
+
+/* hide icon glyphs completely */
+.routing-pill-icon {
+  display: none !important;
+}
+
+/* ---------- 3. Footer vs header mapping row ---------- */
+
+/* Hide the header mapping row we experimented with */
+.rundown-header-routing {
+  display: none !important;
+}
+
+/* Show mapping row in footer again */
+.rundown-footer {
+  border-top: 1px solid rgba(148, 163, 184, 0.3);
+  padding-top: 6px;
+  margin-top: 4px;
+}
+
+.rundown-footer .rundown-routing-row {
+  display: flex !important;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  padding: 2px 0;
+}
+
+.rundown-footer .routing-types-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+}
+
+/* =========================================================
+   Rundown item type colours – left edge
+   ========================================================= */
+
+.rundown-item {
+  position: relative;
+  border-left: 3px solid transparent; /* default, overridden per type */
+}
+
+/* Segment = blue */
+.rundown-item-type-segment {
+  border-left-color: #3b82f6;
+}
+
+/* Ad = red */
+.rundown-item-type-ad {
+  border-left-color: #ef4444;
+}
+
+/* Break = orange/amber */
+.rundown-item-type-break {
+  border-left-color: #f97316;
+}
+
+/* Chat = green */
+.rundown-item-type-chat {
+  border-left-color: #22c55e;
+}
+
+/* VT = yellow */
+.rundown-item-type-vt {
+  border-left-color: #eab308;
+}
+
+/* GFX = purple */
+.rundown-item-type-gfx {
+  border-left-color: #a855f7;
+}
+
+.rundown-item-type-segment,
+.rundown-item-type-ad,
+.rundown-item-type-break,
+.rundown-item-type-chat,
+.rundown-item-type-vt,
+.rundown-item-type-gfx {
+  box-shadow: inset 3px 0 8px rgba(15, 23, 42, 0.9);
+}
+
+/* =========================================================
+   Remaining Time Pill – Full Broadcast Treatment
+   ========================================================= */
+
+/* Base pill styling upgrade */
+.rundown-remaining-pill {
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  transition: color 0.25s ease, text-shadow 0.25s ease;
+}
+
+/* ----- Smooth colour states ----- */
+
+/* Neon green */
+.remaining-green {
+  color: #00ff87;
+  text-shadow: 0 0 8px rgba(0, 255, 135, 0.95);
+}
+
+/* Soft warning yellow */
+.remaining-yellow {
+  color: #ffe666;
+  text-shadow: 0 0 8px rgba(255, 230, 102, 0.9);
+}
+
+/* Hard “danger” red – non-flashing base */
+.remaining-red {
+  color: #ff4b4b;
+  text-shadow: 0 0 8px rgba(255, 75, 75, 0.95);
+}
+
+/* ----- CRITICAL FLASH MODE (0–2%) ----- */
+
+.remaining-critical-flash {
+  animation: rundown-critical-flash 0.55s infinite ease-in-out;
+}
+
+@keyframes rundown-critical-flash {
+  0% {
+    color: #ff4b4b;
+    text-shadow: 0 0 10px rgba(255, 75, 75, 0.95);
+    transform: scale(1);
+  }
+  50% {
+    color: #ff8b8b;
+    text-shadow: 0 0 14px rgba(255, 115, 115, 1);
+    transform: scale(1.07);
+  }
+  100% {
+    color: #ff4b4b;
+    text-shadow: 0 0 10px rgba(255, 75, 75, 0.95);
+    transform: scale(1);
+  }
+}
+
+/* ----- OVERRUN MODE (elapsed > duration) ----- */
+
+.remaining-overrun {
+  color: #ff4bff; /* magenta */
+  text-shadow: 0 0 10px rgba(255, 75, 255, 0.95);
+  animation: rundown-overrun-pulse 0.7s ease-in-out infinite;
+}
+
+@keyframes rundown-overrun-pulse {
+  0% {
+    transform: scale(1);
+    text-shadow:
+      0 0 6px rgba(255, 75, 255, 0.6),
+      0 0 10px rgba(255, 75, 255, 0.4);
+  }
+  50% {
+    transform: scale(1.06);
+    text-shadow:
+      0 0 10px rgba(255, 75, 255, 0.9),
+      0 0 16px rgba(255, 75, 255, 0.9);
+  }
+  100% {
+    transform: scale(1);
+    text-shadow:
+      0 0 6px rgba(255, 75, 255, 0.6),
+      0 0 10px rgba(255, 75, 255, 0.4);
+  }
+}
+
+/* =========================================================
+   Rundown – hierarchy, states, mapping coverage, follow toggle
+   ========================================================= */
+
+/* --- Header hierarchy --- */
+
+.rundown-header-main {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.rundown-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* LIVE / OFFLINE pill */
+.status-pill {
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+}
+
+.status-pill-live {
+  background: rgba(34, 197, 94, 0.25);
+  border: 1px solid rgba(34, 197, 94, 0.95);
+  color: #bbf7d0;
+  box-shadow: 0 0 10px rgba(34, 197, 94, 0.7);
+}
+
+.status-pill-offline {
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.8);
+  color: rgba(148, 163, 184, 0.95);
+}
+
+/* Live strip mode label */
+.rundown-live-title-block {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.rundown-live-mode {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+}
+
+.runmode-label {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.9;
+}
+
+.runmode-status {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 9px;
+}
+
+.runmode-status.running {
+  color: rgba(148, 163, 184, 0.95);
+}
+
+.runmode-status.ready {
+  color: #22c55e;
+}
+
+/* Live elapsed pill when overrun */
+.pill-live-overrun {
+  border-color: rgba(255, 75, 255, 0.95);
+  box-shadow: 0 0 14px rgba(255, 75, 255, 0.9);
+}
+
+/* --- Next button state cues --- */
+
+.rundown-next-button.next-underrun {
+  border-color: rgba(234, 179, 8, 0.9);
+  box-shadow: 0 0 10px rgba(234, 179, 8, 0.45);
+}
+
+.rundown-next-button.next-overrun {
+  border-color: rgba(255, 75, 255, 0.95);
+  box-shadow: 0 0 14px rgba(255, 75, 255, 0.75);
+}
+
+/* --- Follow playhead toggle --- */
+
+.follow-playhead-toggle {
+  border-radius: 6px;
+  padding: 4px 10px;
+  border: 1px dashed rgba(148, 163, 184, 0.7);
+  background: rgba(15, 23, 42, 0.95);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(148, 163, 184, 0.95);
+  cursor: pointer;
+}
+
+.follow-playhead-toggle.is-active {
+  border-style: solid;
+  border-color: rgba(56, 189, 248, 0.95);
+  color: #e0f2fe;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.75);
+}
+
+/* --- Item status treatments --- */
+
+.rundown-item.status-live {
+  box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.9);
+}
+
+.rundown-item.status-done {
+  opacity: 0.5;
+  filter: saturate(0.6);
+}
+
+.rundown-item.status-skipped {
+  opacity: 0.7;
+  border-style: dashed;
+  border-color: rgba(248, 113, 113, 0.7);
+}
+
+.rundown-item.status-skipped .rundown-item-title {
+  text-decoration: line-through;
+}
+
+/* --- Progress bar colour alignment --- */
+
+.rundown-live-progress-fill,
+.rundown-item-progress-fill {
+  background: linear-gradient(90deg, #00ff87, #eab308);
+}
+
+/* --- Mapping footer coverage --- */
+
+.routing-pill-unused {
+  opacity: 0.35;
+  border-style: dashed;
+}
+
+.routing-pill-unmapped {
+  border-color: rgba(239, 68, 68, 0.85);
+}
+
+.routing-pill-mapped {
+  border-color: rgba(34, 197, 94, 0.95);
+  box-shadow: 0 0 10px rgba(34, 197, 94, 0.8);
+}
+
+/* --- Remaining time pill (already added earlier, kept here for clarity) --- */
+
+.rundown-remaining-pill {
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  transition: color 0.25s ease, text-shadow 0.25s ease, transform 0.2s ease;
+}
+
+/* Neon green */
+.remaining-green {
+  color: #00ff87;
+  text-shadow: 0 0 8px rgba(0, 255, 135, 0.95);
+}
+
+/* Warning yellow */
+.remaining-yellow {
+  color: #ffe666;
+  text-shadow: 0 0 8px rgba(255, 230, 102, 0.9);
+}
+
+/* Danger red */
+.remaining-red {
+  color: #ff4b4b;
+  text-shadow: 0 0 8px rgba(255, 75, 75, 0.95);
+}
+
+/* Critical flash 0–2% */
+.remaining-critical-flash {
+  animation: rundown-critical-flash 0.55s infinite ease-in-out;
+}
+
+@keyframes rundown-critical-flash {
+  0% {
+    transform: scale(1);
+    text-shadow: 0 0 6px rgba(255, 75, 75, 0.8);
+  }
+  50% {
+    transform: scale(1.07);
+    text-shadow: 0 0 14px rgba(255, 115, 115, 1);
+  }
+  100% {
+    transform: scale(1);
+    text-shadow: 0 0 6px rgba(255, 75, 75, 0.8);
+  }
+}
+
+/* Overrun magenta pulse */
+.remaining-overrun {
+  color: #ff4bff;
+  text-shadow: 0 0 10px rgba(255, 75, 255, 0.95);
+  animation: rundown-overrun-pulse 0.7s ease-in-out infinite;
+}
+
+@keyframes rundown-overrun-pulse {
+  0% {
+    transform: scale(1);
+    text-shadow:
+      0 0 6px rgba(255, 75, 255, 0.6),
+      0 0 10px rgba(255, 75, 255, 0.4);
+  }
+  50% {
+    transform: scale(1.06);
+    text-shadow:
+      0 0 10px rgba(255, 75, 255, 0.9),
+      0 0 16px rgba(255, 75, 255, 0.9);
+  }
+  100% {
+    transform: scale(1);
+    text-shadow:
+      0 0 6px rgba(255, 75, 255, 0.6),
+      0 0 10px rgba(255, 75, 255, 0.4);
+  }
+}
+
+/* =========================================================
+   Rundown – hierarchy, states, mapping coverage, follow toggle
+   ========================================================= */
+
+/* --- Header hierarchy --- */
+
+.rundown-header-main {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.rundown-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* LIVE / OFFLINE pill */
+.status-pill {
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+}
+
+.status-pill-live {
+  background: rgba(34, 197, 94, 0.25);
+  border: 1px solid rgba(34, 197, 94, 0.95);
+  color: #bbf7d0;
+  box-shadow: 0 0 10px rgba(34, 197, 94, 0.7);
+}
+
+.status-pill-offline {
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.8);
+  color: rgba(148, 163, 184, 0.95);
+}
+
+/* Live strip mode label */
+.rundown-live-title-block {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.rundown-live-mode {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+}
+
+.runmode-label {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.9;
+}
+
+.runmode-status {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 9px;
+}
+
+.runmode-status.running {
+  color: rgba(148, 163, 184, 0.95);
+}
+
+.runmode-status.ready {
+  color: #22c55e;
+}
+
+/* Live elapsed pill when overrun */
+.pill-live-overrun {
+  border-color: rgba(255, 75, 255, 0.95);
+  box-shadow: 0 0 14px rgba(255, 75, 255, 0.9);
+}
+
+/* --- Next button state cues --- */
+
+.rundown-next-button.next-underrun {
+  border-color: rgba(234, 179, 8, 0.9);
+  box-shadow: 0 0 10px rgba(234, 179, 8, 0.45);
+}
+
+.rundown-next-button.next-overrun {
+  border-color: rgba(255, 75, 255, 0.95);
+  box-shadow: 0 0 14px rgba(255, 75, 255, 0.75);
+}
+
+/* --- Follow playhead toggle --- */
+
+.follow-playhead-toggle {
+  border-radius: 6px;
+  padding: 4px 10px;
+  border: 1px dashed rgba(148, 163, 184, 0.7);
+  background: rgba(15, 23, 42, 0.95);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(148, 163, 184, 0.95);
+  cursor: pointer;
+}
+
+.follow-playhead-toggle.is-active {
+  border-style: solid;
+  border-color: rgba(56, 189, 248, 0.95);
+  color: #e0f2fe;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.75);
+}
+
+/* --- Item status treatments --- */
+
+.rundown-item.status-live {
+  box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.9);
+}
+
+.rundown-item.status-done {
+  opacity: 0.5;
+  filter: saturate(0.6);
+}
+
+.rundown-item.status-skipped {
+  opacity: 0.7;
+  border-style: dashed;
+  border-color: rgba(248, 113, 113, 0.7);
+}
+
+.rundown-item.status-skipped .rundown-item-title {
+  text-decoration: line-through;
+}
+
+/* --- Progress bar colour alignment --- */
+
+.rundown-live-progress-fill,
+.rundown-item-progress-fill {
+  background: linear-gradient(90deg, #00ff87, #eab308);
+}
+
+/* --- Mapping footer coverage --- */
+
+.routing-pill-unused {
+  opacity: 0.35;
+  border-style: dashed;
+}
+
+.routing-pill-unmapped {
+  border-color: rgba(239, 68, 68, 0.85);
+}
+
+.routing-pill-mapped {
+  border-color: rgba(34, 197, 94, 0.95);
+  box-shadow: 0 0 10px rgba(34, 197, 94, 0.8);
+}
+
+/* --- Remaining time pill (already added earlier, kept here for clarity) --- */
+
+.rundown-remaining-pill {
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  transition: color 0.25s ease, text-shadow 0.25s ease, transform 0.2s ease;
+}
+
+/* Neon green */
+.remaining-green {
+  color: #00ff87;
+  text-shadow: 0 0 8px rgba(0, 255, 135, 0.95);
+}
+
+/* Warning yellow */
+.remaining-yellow {
+  color: #ffe666;
+  text-shadow: 0 0 8px rgba(255, 230, 102, 0.9);
+}
+
+/* Danger red */
+.remaining-red {
+  color: #ff4b4b;
+  text-shadow: 0 0 8px rgba(255, 75, 75, 0.95);
+}
+
+/* Critical flash 0–2% */
+.remaining-critical-flash {
+  animation: rundown-critical-flash 0.55s infinite ease-in-out;
+}
+
+@keyframes rundown-critical-flash {
+  0% {
+    transform: scale(1);
+    text-shadow: 0 0 6px rgba(255, 75, 75, 0.8);
+  }
+  50% {
+    transform: scale(1.07);
+    text-shadow: 0 0 14px rgba(255, 115, 115, 1);
+  }
+  100% {
+    transform: scale(1);
+    text-shadow: 0 0 6px rgba(255, 75, 75, 0.8);
+  }
+}
+
+/* Overrun magenta pulse */
+.remaining-overrun {
+  color: #ff4bff;
+  text-shadow: 0 0 10px rgba(255, 75, 255, 0.95);
+  animation: rundown-overrun-pulse 0.7s ease-in-out infinite;
+}
+
+@keyframes rundown-overrun-pulse {
+  0% {
+    transform: scale(1);
+    text-shadow:
+      0 0 6px rgba(255, 75, 255, 0.6),
+      0 0 10px rgba(255, 75, 255, 0.4);
+  }
+  50% {
+    transform: scale(1.06);
+    text-shadow:
+      0 0 10px rgba(255, 75, 255, 0.9),
+      0 0 16px rgba(255, 75, 255, 0.9);
+  }
+  100% {
+    transform: scale(1);
+    text-shadow:
+      0 0 6px rgba(255, 75, 255, 0.6),
+      0 0 10px rgba(255, 75, 255, 0.4);
+  }
+}
+
+/* =========================================================
+   NOW strip – tighter layout
+   ========================================================= */
+
+.rundown-live-strip {
+  padding: 10px 14px 8px 14px;
+  border-radius: 10px;
+  background: radial-gradient(circle at top left,
+      rgba(15, 23, 42, 0.9),
+      rgba(15, 23, 42, 0.98));
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.rundown-live-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.rundown-live-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.rundown-live-title {
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rundown-live-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+/* Secondary row */
+.rundown-live-row-secondary {
+  margin-top: 2px;
+}
+
+.rundown-live-mode {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+}
+
+.rundown-live-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* NOW badge */
+.rundown-live-label {
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  background: linear-gradient(
+    145deg,
+    rgba(248, 113, 113, 0.3),
+    rgba(239, 68, 68, 0.9)
+  );
+  color: #fee2e2;
+  box-shadow: 0 0 12px rgba(248, 113, 113, 0.9);
+}
+
+/* Progress bar sits right under the two rows */
+.rundown-live-progress {
+  margin-top: 4px;
+}
+
+/* =========================================================
+   NOW live strip – compact layout
+   ========================================================= */
+
+.rundown-live-strip {
+  margin-top: 8px;
+  padding: 10px 14px 8px 14px;
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.96);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.rundown-live-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.rundown-live-left {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px; /* <- horizontal gap between NOW block and title */
+  min-width: 0;
+}
+
+.rundown-live-now-block {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.rundown-live-label {
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  background: linear-gradient(
+    145deg,
+    rgba(248, 113, 113, 0.3),
+    rgba(239, 68, 68, 0.9)
+  );
+  color: #fee2e2;
+  box-shadow: 0 0 10px rgba(248, 113, 113, 0.85);
+}
+
+/* Small line under NOW: AUTO / READY FOR NEXT */
+.rundown-live-mode-under {
+  display: flex;
+  gap: 4px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.rundown-live-title {
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Right-hand stack: meta pills + big END SEGMENT */
+.rundown-live-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: flex-end;
+  min-width: 0;
+}
+
+.rundown-live-meta-inline {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.end-segment-button {
+  min-width: 140px; /* keeps it big and square-ish */
+}
+
+/* Show-level progress bar right under the strip */
+.rundown-live-progress {
+  margin-top: 2px;
+}
+
+/* ===== NOW strip – final layout ===== */
+
+.rundown-live-strip {
+  margin-top: 8px;
+  padding: 10px 14px 8px 14px;
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.96);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.rundown-live-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+/* LEFT SIDE */
+.rundown-live-left {
+  display: flex;
+  align-items: center;
+  gap: 6px; /* horizontal spacing between NOW block and title */
+  min-width: 0;
+}
+
+.rundown-live-now-col {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.rundown-live-label {
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  background: linear-gradient(
+    145deg,
+    rgba(248, 113, 113, 0.3),
+    rgba(239, 68, 68, 0.9)
+  );
+  color: #fee2e2;
+  box-shadow: 0 0 10px rgba(248, 113, 113, 0.85);
+}
+
+/* Tiny AUTO / READY line directly under NOW */
+.rundown-live-mode-compact {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  white-space: nowrap; /* keep AUTO READY FOR NEXT on one line */
+  opacity: 0.9;
+}
+
+.runmode-status-inline.ready {
+  color: #22c55e;
+}
+
+.runmode-status-inline.running {
+  color: #e5e7eb;
+}
+
+.rundown-live-title {
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* RIGHT SIDE */
+.rundown-live-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: flex-end;
+  min-width: 0;
+}
+
+.rundown-live-meta-inline {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.end-segment-button {
+  min-width: 140px;  /* keeps it big and red */
+}
+
+/* Show-level progress bar directly under the strip */
+.rundown-live-progress {
+  margin-top: 2px;
+}
+
+/* ===== NOW strip – grid layout ===== */
+
+.rundown-live-strip {
+  margin-top: 8px;
+  padding: 10px 14px 8px 14px;
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.96);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* 2-column grid: left = NOW/title, right = meta+button */
+.rundown-live-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: 16px;
+  row-gap: 4px;
+  align-items: center;
+}
+
+/* LEFT CELL */
+.rundown-live-cell-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.rundown-live-topline {
+  display: flex;
+  align-items: center;
+  gap: 6px;  /* horizontal space between NOW and title */
+  min-width: 0;
+}
+
+.rundown-live-label {
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  background: linear-gradient(
+    145deg,
+    rgba(248, 113, 113, 0.3),
+    rgba(239, 68, 68, 0.9)
+  );
+  color: #fee2e2;
+  box-shadow: 0 0 10px rgba(248, 113, 113, 0.85);
+}
+
+.rundown-live-title {
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* AUTO · READY FOR NEXT line */
+.rundown-live-subline {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.runmode-dot {
+  opacity: 0.7;
+}
+
+.runmode-status-inline.ready {
+  color: #22c55e;
+}
+
+.runmode-status-inline.running {
+  color: #e5e7eb;
+}
+
+/* RIGHT CELL */
+.rundown-live-cell-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: flex-end;
+  min-width: 0;
+}
+
+.rundown-live-meta-inline {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.end-segment-button {
+  min-width: 140px;   /* keeps it big and obvious */
+}
+
+/* Show-level progress bar sits under the grid */
+.rundown-live-progress {
+  margin-top: 2px;
+}
+
+/* Show-level progress bar under NOW strip */
+.rundown-live-progress {
+  margin-top: 6px;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.9); /* dark track */
+  overflow: hidden;
+}
+
+.rundown-live-progress-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #22c55e, #eab308, #ef4444);
+  transition: width 0.25s ease-out;
+}
+
+/* NOW strip – grid layout, full width */
+
+.rundown-live-strip {
+  margin-top: 8px;
+  padding: 10px 14px 8px 14px;
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.96);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.rundown-live-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: 16px;
+  row-gap: 4px;
+  align-items: center;
+  width: 100%;
+}
+
+/* left cell: NOW + title + AUTO/READY */
+.rundown-live-cell-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.rundown-live-topline {
+  display: flex;
+  align-items: center;
+  gap: 6px; /* horizontal spacing between NOW and title */
+  min-width: 0;
+}
+
+.rundown-live-title {
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* AUTO · READY FOR NEXT line */
+.rundown-live-subline,
+.rundown-live-mode-compact {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.runmode-status-inline.ready {
+  color: #22c55e;
+}
+
+.runmode-status-inline.running {
+  color: #e5e7eb;
+}
+
+/* right cell: pills + big red button */
+.rundown-live-cell-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: flex-end;
+  min-width: 0;
+}
+
+.rundown-live-meta-inline {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.end-segment-button {
+  min-width: 140px;
+}
+
+/* ==== NOW strip show-level progress bar ==== */
+
+.rundown-live-progress {
+  margin-top: 6px;
+  width: 100%;
+  height: 4px;                /* <- if this is 0, you see nothing */
+  border-radius: 999px;
+  background: rgba(10, 15, 30, 0.9); /* dark track */
+  overflow: hidden;
+}
+
+.rundown-live-progress-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #22c55e, #eab308, #ef4444);
+  transition: width 0.25s ease-out;
+}
+
+/* ===== Rundown header template tools ===== */
+
+.rundown-template-tools {
+  margin-top: 2px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+}
+
+/*
+  TemplateSelector was originally designed for the editor header.
+  This wrapper gently scales it down so it doesn't overpower the
+  LIVE / On Air / Flow block on the right.
+*/
+.rundown-template-tools > * {
+  transform: scale(0.9);
+  transform-origin: left center;
+}
+
+/* Optional: keep the text from hugging the panel edge */
+.rundown-header-main {
+  gap: 4px;
+}
+
+/* =========================================================
+   Rundown header – template selector styling
+   ========================================================= */
+
+.rundown-template-tools {
+  margin-top: 2px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: #9ca3af;           /* softer grey for "Rundown:" label */
+}
+
+/* Label "Rundown:" */
+.rundown-template-tools span {
+  font-weight: 500;
+  opacity: 0.8;
+}
+
+/* The <select> that shows "Demo Show Template" */
+.rundown-template-tools select {
+  background: radial-gradient(circle at top,
+      rgba(15, 23, 42, 0.95),
+      rgba(15, 23, 42, 1));
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.8);
+  padding: 2px 12px;
+  font-size: 11px;
+  color: #e5e7eb;
+  outline: none;
+  appearance: none;          /* kill default white OS chrome */
+  -moz-appearance: none;
+  -webkit-appearance: none;
+}
+
+/* Small caret hint on the select (fake dropdown arrow) */
+.rundown-template-tools select::-ms-expand {
+  display: none;
+}
+
+/* New / Duplicate / Delete buttons */
+.rundown-template-tools button {
+  background: rgba(15, 23, 42, 0.95);
+  border-radius: 999px;
+  border: 1px solid rgba(51, 65, 85, 0.9);
+  padding: 2px 8px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #9ca3af;
+  cursor: pointer;
+}
+
+.rundown-template-tools button:hover {
+  border-color: rgba(148, 163, 184, 1);
+  color: #e5e7eb;
+}
+
+/* Keep the whole block from stealing emphasis from the main title */
+.rundown-header-main {
+  gap: 4px;
+}
+
+/* =========================================================
+   Rundown header template manager – pill-style buttons
+   ========================================================= */
+
+.rundown-template-tools {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* only hide the text content "Rundown:" — NOT the label element */
+.rundown-template-tools label {
+  font-size: 0 !important;
+  margin-right: 6px;
+}
+
+
+/* <select> dropdown styled like standard controller pills */
+.rundown-template-tools select {
+  padding: 4px 12px;
+  font-size: 12px;
+  background: rgba(30, 41, 59, 0.9);
+  border: 1px solid rgba(71, 85, 105, 0.8);
+  border-radius: 6px;                        /* << rectangle, not oval */
+  color: #e5e7eb;
+  outline: none;
+}
+
+/* The action pills */
+.rundown-template-tools button {
+  padding: 4px 10px;
+  font-size: 11px;
+  background: rgba(30, 41, 59, 0.9);
+  border-radius: 6px;                        /* << matches segment pills */
+  border: 1px solid rgba(71, 85, 105, 0.9);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: #cbd5e1;
+  cursor: pointer;
+  transition: 0.15s;
+}
+
+/* Hover effect = same glow as your pills */
+.rundown-template-tools button:hover,
+.rundown-template-tools select:hover {
+  border-color: rgba(148, 163, 184, 1.0);
+  color: #ffffff;
+}
+
+/* Ensure the header layout doesn’t indent */
+.rundown-header-main {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Title aligned to extreme left */
+.rundown-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;  /* << force left alignment */
+  gap: 8px;
+}
+
+/* =========================================================
+   Rundown header – final spacing + pill styling
+   ========================================================= */
+
+/* Header content: stack title + template tools, left aligned */
+.rundown-header-main {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 6px 0 6px 0; /* consistent vertical breathing space */
+}
+
+/* Title row left-aligned, with small gap to LIVE pill */
+.rundown-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+}
+
+/* Template pills row directly under the title, left edge aligned */
+.rundown-template-tools {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  padding: 2px 0 0 0;   /* tiny top padding so gap matches header bottom */
+}
+
+/* Buttons in the template tools row: match main controller pills */
+.rundown-template-tools button {
+  padding: 4px 14px;     /* more padding -> feels like real controls */
+  font-size: 11px;
+  background: rgba(30, 41, 59, 0.95);
+  border-radius: 6px;
+  border: 1px solid rgba(71, 85, 105, 0.9);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #cbd5e1;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease,
+    color 0.15s ease;
+  margin-right: 6px;
+}
+
+.rundown-template-tools button:hover {
+  border-color: rgba(148, 163, 184, 1);
+  color: #ffffff;
+}
+
+.rundown-template-tools select {
+  padding: 4px 12px;
+  font-size: 12px;
+  background: rgba(30, 41, 59, 0.95);
+  border-radius: 6px;
+  border: 1px solid rgba(71, 85, 105, 0.9);
+  color: #e5e7eb;
+  cursor: pointer;
+}
+
+/* ===== "SHOW ENDING" badge in NOW strip ===== */
+
+.runmode-dot {
+  opacity: 0.7;
+}
+
+.runmode-ending {
+  color: #f87171;
+  font-weight: 600;
+  animation: show-ending-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes show-ending-pulse {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* ===== Interrupt overlay on top of base rundown card ===== */
+
+.rundown-item {
+  position: relative; /* allow absolute overlay inside */
+}
+
+.rundown-interrupt-overlay {
+  position: absolute;
+  inset: 2px 2px 2px 2px; /* inside the card edge */
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.96);
+  border: 1px solid rgba(248, 113, 113, 0.9);
+  box-shadow:
+    0 0 0 1px rgba(248, 113, 113, 0.5),
+    0 0 24px rgba(248, 113, 113, 0.35);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  padding: 8px 12px;
+  pointer-events: none;      /* overlay is informational; clicks go through */
+  z-index: 2;
+}
+
+.rundown-interrupt-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pill-interrupt {
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  background: rgba(248, 113, 113, 0.15);
+  border: 1px solid rgba(248, 113, 113, 0.85);
+  color: #fecaca;
+  animation: interrupt-pulse 1.25s ease-in-out infinite;
+}
+
+.rundown-interrupt-type {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #e5e7eb;
+  opacity: 0.9;
+}
+
+.rundown-interrupt-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #e5e7eb;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rundown-interrupt-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  opacity: 0.9;
+}
+
+@keyframes interrupt-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(248, 113, 113, 0.0);
+    opacity: 0.7;
+  }
+  50% {
+    box-shadow: 0 0 18px 2px rgba(248, 113, 113, 0.7);
+    opacity: 1;
+  }
+}
+
+
+
+

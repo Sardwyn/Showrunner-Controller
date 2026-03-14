@@ -1,0 +1,57 @@
+Theming:
+
+🎨 Scraplet Controller Theme Template (v1)
+
+Global (required)
+
+ bg.png – full-screen background (4K)
+
+ vignette.png – transparent overlay for .pc-root::before
+
+ panel-frame.png – 9-slice border for generic panels
+
+ panel-noise.png – tiling interior texture (or flat color)
+
+ CSS block .pc-root.theme-<id> setting:
+
+base background
+
+base text color
+
+basic panel padding
+
+Panel types (strongly recommended)
+
+ Styling for .pc-panel--monitor
+
+ Styling for .pc-panel--info
+
+ Styling for .pc-panel--control
+
+ Styling for .pc-panel--mixer
+
+Each may optionally:
+
+override border-image-source (different frame)
+
+tweak padding, shadows, interiors
+
+Header/Buttons (nice upgrade)
+
+ Header style: .pc-root.theme-<id> .pc-header
+
+ Mode toggle buttons: .pc-root.theme-<id> .pc-mode-toggle button
+
+ Theme toggle chip style: .pc-root.theme-<id> .pc-theme-toggle button.is-active
+
+ Button colour tokens (live/preview/warn) in CSS vars or direct classes.
+
+Optional per-widget skins (only if worth it)
+
+ Monitor chrome overlay inside VideoMonitor / PreviewMonitor
+
+ Audio meter overlay texture
+
+ Chat background overlay inside ChatPanel
+
+ Special transitions strip embellishments

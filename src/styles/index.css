@@ -1,0 +1,12 @@
+/* src/styles/index.css */
+
+/* All imports first (required by Vite/PostCSS) */
+@import "./pro-buttons.css";
+@import "./monitors.css";
+@import "./production-controller.css";
+@import "./controller-theme.css";
+
+/* Then Tailwind */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
