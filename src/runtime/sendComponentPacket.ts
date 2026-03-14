@@ -1,4 +1,4 @@
-import { OverlayRuntimePacketV1 } from "../contracts/componentRuntime";
+import type { OverlayRuntimePacketV1 } from "@scraplet/contracts/overlayRuntime";
 
 function resolveRuntimePacketUrl() {
   const host = window.location.hostname;

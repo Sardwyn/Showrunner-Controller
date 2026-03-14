@@ -1,6 +1,10 @@
 // src/rundown/runtime/useRundownEngine.ts
 import { useCallback, useMemo, useState } from "react";
-import { buildComponentRuntimePacket } from "../../contracts/componentRuntime";
+import {
+  ComponentAddressV1,
+  OverlayRuntimePacketV1,
+  createOverlayRuntimePacketV1,
+} from "@scraplet/contracts/overlayRuntime";
 import {
   RundownTemplate,
   ShowInstance,
@@ -36,6 +40,72 @@ export type UseRundownEngineOptions = {
     duckOthers?: boolean;
   }) => void;
 };
+
+function safeJsonParse(input: string | undefined, fallback: any) {
+  const value = String(input || "").trim();
+  if (!value) return fallback;
+  try {
+    return JSON.parse(value);
+  } catch {
+    return fallback;
+  }
+}
+
+function buildComponentRuntimePacket(input: {
+  address: ComponentAddressV1;
+  operation: "show" | "hide" | "setProp" | "setState" | "dispatch";
+  producer?: string;
+  platform?: string;
+  patchText?: string;
+  event?: string;
+  dataText?: string;
+}): OverlayRuntimePacketV1 {
+  const producer = input.producer || "studio-controller";
+  const platform = input.platform || "internal";
+  const tenantId = String(input.address.tenantId || "");
+
+  if (!tenantId) {
+    throw new Error("Component target is missing tenantId");
+  }
+
+  const scope = {
+    tenantId,
+    overlayPublicId: input.address.overlayPublicId,
+    componentInstanceId:
+      input.address.kind === "native" ? input.address.componentInstanceId : undefined,
+  };
+
+  let type = "component.show";
+  let payload: Record<string, any> = {};
+
+  if (input.operation === "hide") {
+    type = "component.hide";
+  } else if (input.operation === "setProp") {
+    type = "component.setProp";
+    payload = { patch: safeJsonParse(input.patchText, {}) };
+  } else if (input.operation === "setState") {
+    type = "component.setState";
+    payload = { patch: safeJsonParse(input.patchText, {}) };
+  } else if (input.operation === "dispatch") {
+    type = "component.dispatch";
+    payload = {
+      event: String(input.event || "").trim(),
+      data: safeJsonParse(input.dataText, {}),
+    };
+  }
+
+  return createOverlayRuntimePacketV1({
+    header: {
+      id: `ctrl_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+      type,
+      ts: Date.now(),
+      producer,
+      platform,
+      scope,
+    },
+    payload,
+  });
+}
 
 export type UseRundownEngineResult = {
   show: ShowInstance;
