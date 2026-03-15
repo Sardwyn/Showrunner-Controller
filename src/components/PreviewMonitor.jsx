@@ -147,12 +147,8 @@ export default function PreviewMonitor() {
     const data = await res.json();
     const components = Array.isArray(data?.components) ? data.components : [];
     setOverlayData(data);
-    const preferred =
-      components.find((component) => component?.metadata?.runtimeKind === "lowerThird")?.instanceId ||
-      components[0]?.instanceId ||
-      "";
     setFocusedComponentId((current) =>
-      current && components.some((component) => component.instanceId === current) ? current : preferred
+      current && components.some((component) => component.instanceId === current) ? current : ""
     );
   }, []);
 
