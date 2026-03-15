@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { createOverlayRuntimePacketV1 } from "@scraplet/contracts/overlayRuntime";
 import { sendComponentPacket } from "../runtime/sendComponentPacket";
 
@@ -41,7 +41,7 @@ function resolveDashboardUrl(path: string) {
 function buildComponentPacket(input: {
   overlay: ExposedOverlay;
   component: ExposedComponent;
-  type: "component.show" | "component.hide" | "component.setProp";
+  type: "component.show" | "component.hide" | "component.setProp" | "component.dispatch";
   payload: Record<string, any>;
 }) {
   return createOverlayRuntimePacketV1({
@@ -61,6 +61,24 @@ function buildComponentPacket(input: {
   });
 }
 
+function getComponentKind(component: ExposedComponent) {
+  const runtimeKind = String(component.metadata?.runtimeKind || "");
+  if (runtimeKind === "lowerThird") return "Lower Third";
+  if (runtimeKind) return runtimeKind;
+  return "Component";
+}
+
+function getDefaultQuickActions(component: ExposedComponent) {
+  if (component.quickActions?.length) return component.quickActions;
+  if (component.metadata?.runtimeKind === "lowerThird") {
+    return [
+      { id: "show" as const, label: "Show" },
+      { id: "hide" as const, label: "Hide" },
+    ];
+  }
+  return [];
+}
+
 export default function OverlayOperatorPanel() {
   const [overlays, setOverlays] = useState<ExposedOverlay[]>([]);
   const [selectedOverlayId, setSelectedOverlayId] = useState<string>("");
@@ -68,30 +86,58 @@ export default function OverlayOperatorPanel() {
   const [overlayData, setOverlayData] = useState<OverlayComponentResponse | null>(null);
   const [draftProps, setDraftProps] = useState<Record<string, any>>({});
   const [loading, setLoading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string>("");
   const [status, setStatus] = useState<string>("");
+
+  const loadOverlays = useCallback(async () => {
+    const res = await fetch(resolveDashboardUrl("/dashboard/api/controller/overlays"), {
+      credentials: "include",
+    });
+    if (!res.ok) throw new Error(`Failed to load overlays (${res.status})`);
+    const data = await res.json();
+    const next = Array.isArray(data?.overlays) ? data.overlays : [];
+    setOverlays(next);
+    setSelectedOverlayId((current) => {
+      if (current && next.some((overlay) => String(overlay.id) === current)) return current;
+      return next[0]?.id != null ? String(next[0].id) : "";
+    });
+  }, []);
+
+  const loadComponents = useCallback(
+    async (overlayId: string) => {
+      if (!overlayId) {
+        setOverlayData(null);
+        return;
+      }
+      const res = await fetch(
+        resolveDashboardUrl(`/dashboard/api/controller/overlays/${encodeURIComponent(overlayId)}/components`),
+        {
+          credentials: "include",
+        }
+      );
+      if (!res.ok) throw new Error(`Failed to load exposed components (${res.status})`);
+      const data = await res.json();
+      setOverlayData(data);
+      const components = Array.isArray(data?.components) ? data.components : [];
+      const preferred =
+        components.find((component: ExposedComponent) => component.metadata?.runtimeKind === "lowerThird")?.instanceId ||
+        components[0]?.instanceId ||
+        "";
+      setSelectedComponentId((current) =>
+        current && components.some((component: ExposedComponent) => component.instanceId === current) ? current : preferred
+      );
+    },
+    []
+  );
 
   useEffect(() => {
     let alive = true;
     setLoading(true);
-    fetch(resolveDashboardUrl("/dashboard/api/controller/overlays"), {
-      credentials: "include",
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error(`Failed to load overlays (${res.status})`);
-        return res.json();
-      })
-      .then((data) => {
-        if (!alive) return;
-        const next = Array.isArray(data?.overlays) ? data.overlays : [];
-        setOverlays(next);
-        if (!selectedOverlayId && next[0]?.id != null) {
-          setSelectedOverlayId(String(next[0].id));
-        }
-      })
+    setError("");
+    loadOverlays()
       .catch((err) => {
-        if (!alive) return;
-        setError(err?.message || "Failed to load overlays");
+        if (alive) setError(err?.message || "Failed to load overlays");
       })
       .finally(() => {
         if (alive) setLoading(false);
@@ -99,7 +145,7 @@ export default function OverlayOperatorPanel() {
     return () => {
       alive = false;
     };
-  }, []);
+  }, [loadOverlays]);
 
   useEffect(() => {
     if (!selectedOverlayId) {
@@ -109,23 +155,7 @@ export default function OverlayOperatorPanel() {
     let alive = true;
     setLoading(true);
     setError("");
-    fetch(resolveDashboardUrl(`/dashboard/api/controller/overlays/${encodeURIComponent(selectedOverlayId)}/components`), {
-      credentials: "include",
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error(`Failed to load exposed components (${res.status})`);
-        return res.json();
-      })
-      .then((data) => {
-        if (!alive) return;
-        setOverlayData(data);
-        const firstComponentId = data?.components?.[0]?.instanceId || "";
-        setSelectedComponentId((current) =>
-          current && data?.components?.some((component: ExposedComponent) => component.instanceId === current)
-            ? current
-            : firstComponentId
-        );
-      })
+    loadComponents(selectedOverlayId)
       .catch((err) => {
         if (!alive) return;
         setError(err?.message || "Failed to load exposed components");
@@ -137,7 +167,7 @@ export default function OverlayOperatorPanel() {
     return () => {
       alive = false;
     };
-  }, [selectedOverlayId]);
+  }, [selectedOverlayId, loadComponents]);
 
   const selectedComponent = useMemo(
     () => overlayData?.components?.find((component) => component.instanceId === selectedComponentId) || null,
@@ -156,17 +186,56 @@ export default function OverlayOperatorPanel() {
     setDraftProps(nextDraft);
   }, [selectedComponent]);
 
+  const quickActions = useMemo(
+    () => (selectedComponent ? getDefaultQuickActions(selectedComponent) : []),
+    [selectedComponent]
+  );
+
+  const draftDirty = useMemo(() => {
+    if (!selectedComponent) return false;
+    return (selectedComponent.editableProps || []).some((key) => {
+      const currentValue = selectedComponent.propValues?.[key] ?? "";
+      return String(draftProps[key] ?? "") !== String(currentValue ?? "");
+    });
+  }, [draftProps, selectedComponent]);
+
+  async function refreshCurrentOverlay() {
+    try {
+      setRefreshing(true);
+      setError("");
+      await loadOverlays();
+      if (selectedOverlayId) {
+        await loadComponents(selectedOverlayId);
+      }
+      setStatus("Refreshed");
+      setTimeout(() => setStatus(""), 1200);
+    } catch (err: any) {
+      setError(err?.message || "Failed to refresh");
+    } finally {
+      setRefreshing(false);
+    }
+  }
+
   async function runQuickAction(action: { id: "show" | "hide" | "dispatch"; label: string; event?: string }) {
     if (!overlayData?.overlay || !selectedComponent) return;
-    if (action.id === "dispatch") return;
 
     try {
       setStatus(`${action.label}…`);
+      const type =
+        action.id === "show"
+          ? "component.show"
+          : action.id === "hide"
+            ? "component.hide"
+            : "component.dispatch";
+      const payload =
+        action.id === "dispatch"
+          ? { event: action.event || action.label, data: {} }
+          : {};
       const packet = buildComponentPacket({
         overlay: overlayData.overlay,
         component: selectedComponent,
-        type: action.id === "show" ? "component.show" : "component.hide",
-        payload: {},
+        type,
+        payload,
       });
       await sendComponentPacket(packet);
       setStatus(`${action.label} sent`);
@@ -219,7 +288,9 @@ export default function OverlayOperatorPanel() {
       <div className="controller-panel-header">
         <div>
           <h2 className="controller-panel-title mb-0">Overlay Operator</h2>
-          <div className="overlay-operator-subtitle">Preview exposed graphics, tap them, and fire quick actions.</div>
+          <div className="overlay-operator-subtitle">
+            Load an overlay, select an exposed component, and operate it live.
+          </div>
         </div>
       </div>
 
@@ -236,6 +307,24 @@ export default function OverlayOperatorPanel() {
             </option>
           ))}
         </select>
+        <button
+          type="button"
+          className="overlay-operator-toolbar-button"
+          onClick={refreshCurrentOverlay}
+          disabled={refreshing}
+        >
+          {refreshing ? "Refreshing…" : "Refresh"}
+        </button>
+        {overlay ? (
+          <a
+            className="overlay-operator-toolbar-button is-link"
+            href={previewSrc}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Open
+          </a>
+        ) : null}
         {status ? <div className="overlay-operator-status">{status}</div> : null}
       </div>
 
@@ -276,28 +365,60 @@ export default function OverlayOperatorPanel() {
 
         <div className="overlay-operator-sidebar">
           {loading ? <div className="overlay-operator-empty">Loading…</div> : null}
-          {!loading && !selectedComponent ? (
-            <div className="overlay-operator-empty">Select a hotspot to edit its exposed props.</div>
+
+          {!loading && overlayData?.components?.length ? (
+            <div className="overlay-operator-list">
+              {overlayData.components.map((component) => (
+                <button
+                  key={component.instanceId}
+                  type="button"
+                  className={`overlay-operator-list-item ${selectedComponentId === component.instanceId ? "is-selected" : ""}`}
+                  onClick={() => setSelectedComponentId(component.instanceId)}
+                >
+                  <div className="overlay-operator-list-title">{component.label}</div>
+                  <div className="overlay-operator-list-meta">
+                    <span>{getComponentKind(component)}</span>
+                    <span>{component.instanceId}</span>
+                  </div>
+                </button>
+              ))}
+            </div>
           ) : null}
+
+          {!loading && !selectedComponent ? (
+            <div className="overlay-operator-empty">Select a component from the preview or the list to operate it.</div>
+          ) : null}
+
           {selectedComponent ? (
             <>
               <div className="overlay-operator-card">
-                <div className="overlay-operator-label">{selectedComponent.label}</div>
-                <div className="overlay-operator-meta">{selectedComponent.instanceId}</div>
+                <div className="overlay-operator-card-top">
+                  <div>
+                    <div className="overlay-operator-label">{selectedComponent.label}</div>
+                    <div className="overlay-operator-meta">{selectedComponent.instanceId}</div>
+                  </div>
+                  <div className="overlay-operator-kind">{getComponentKind(selectedComponent)}</div>
+                </div>
+                <div className="overlay-operator-bounds">
+                  {Math.round(selectedComponent.bounds.width)} x {Math.round(selectedComponent.bounds.height)} at{" "}
+                  {Math.round(selectedComponent.bounds.x)},{Math.round(selectedComponent.bounds.y)}
+                </div>
               </div>
 
-              <div className="overlay-operator-actions">
-                {(selectedComponent.quickActions || []).map((action) => (
-                  <button
-                    key={action.id}
-                    type="button"
-                    className="overlay-operator-action"
-                    onClick={() => runQuickAction(action)}
-                  >
-                    {action.label}
-                  </button>
-                ))}
-              </div>
+              {quickActions.length ? (
+                <div className="overlay-operator-actions">
+                  {quickActions.map((action) => (
+                    <button
+                      key={`${action.id}_${action.event || ""}`}
+                      type="button"
+                      className="overlay-operator-action"
+                      onClick={() => runQuickAction(action)}
+                    >
+                      {action.label}
+                    </button>
+                  ))}
+                </div>
+              ) : null}
 
               <div className="overlay-operator-form">
                 {(selectedComponent.editableProps || []).map((key) => {
@@ -322,11 +443,36 @@ export default function OverlayOperatorPanel() {
                     </label>
                   );
                 })}
+
                 {selectedComponent.editableProps?.length ? (
-                  <button type="button" className="overlay-operator-apply" onClick={applyProps}>
-                    Apply Update
-                  </button>
-                ) : null}
+                  <div className="overlay-operator-form-actions">
+                    <button
+                      type="button"
+                      className="overlay-operator-toolbar-button"
+                      onClick={() => {
+                        const resetDraft: Record<string, any> = {};
+                        for (const key of selectedComponent.editableProps || []) {
+                          resetDraft[key] = selectedComponent.propValues?.[key] ?? "";
+                        }
+                        setDraftProps(resetDraft);
+                      }}
+                    >
+                      Reset
+                    </button>
+                    <button
+                      type="button"
+                      className="overlay-operator-apply"
+                      onClick={applyProps}
+                      disabled={!draftDirty}
+                    >
+                      {draftDirty ? "Apply Update" : "Up to Date"}
+                    </button>
+                  </div>
+                ) : (
+                  <div className="overlay-operator-empty">
+                    This component has no editable props exposed to the controller yet.
+                  </div>
+                )}
               </div>
             </>
           ) : null}
