@@ -426,12 +426,12 @@ export default function PreviewMonitor() {
                 const width = `${(bounds.width / overlayData.overlay.baseResolution.width) * 100}%`;
                 const height = `${(bounds.height / overlayData.overlay.baseResolution.height) * 100}%`;
                 const selected = selectedComponentId === component.instanceId;
-                const interactive = selectionMode || selected;
+                const interactive = selectionMode;
                 return (
                   <button
                     key={component.instanceId}
                     type="button"
-                    className={`preview-monitor-hotspot ${selected ? "is-selected" : ""} ${interactive ? "is-active" : ""}`}
+                    className={`preview-monitor-hotspot ${selectionMode && selected ? "is-selected" : ""} ${interactive ? "is-active" : ""}`}
                     style={{ left, top, width, height }}
                     onClick={() => {
                       setSelectedComponentId(component.instanceId);
@@ -440,7 +440,7 @@ export default function PreviewMonitor() {
                     title={component.label}
                     tabIndex={interactive ? 0 : -1}
                   >
-                    {(selectionMode || selected) && <span>{component.label}</span>}
+                    {selectionMode && <span>{component.label}</span>}
                   </button>
                 );
               })}
