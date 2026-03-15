@@ -4,7 +4,7 @@ import path from 'path';
 
 export default defineConfig({
   plugins: [react()],
-  base: "/studio/",
+  base: "/dashboard/studio/",
   server: {
     port: 5174,
   },
