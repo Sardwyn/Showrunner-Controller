@@ -45,6 +45,7 @@ import ChatPanel from "./components/ChatPanel";
 import TransitionPanel from "./components/TransitionPanel";
 import ProgramMonitor from "./components/ProgramMonitor";
 import TeleprompterPanel from "./components/TeleprompterPanel";
+import OverlayOperatorPanel from "./components/OverlayOperatorPanel";
 
 // Debug
 
@@ -58,6 +59,7 @@ const PANEL_REGISTRY = {
   previewMonitor: PreviewMonitor,
   obsScenes: OBSScenePanel,
   transition: TransitionPanel,
+  overlayOperator: OverlayOperatorPanel,
   rundown: RundownPanel,
   camera: CameraPanel,
   lighting: LightingPanel,

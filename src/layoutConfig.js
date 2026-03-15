@@ -27,6 +27,7 @@ export const layoutConfig = {
 
     // RIGHT – rundown, chat, scrapbot status, debug
     { panelId: "rundown", zone: "right", order: 10, size: "default" },
+    { panelId: "overlayOperator", zone: "right", order: 15, size: "default" },
     { panelId: "chat", zone: "right", order: 20, size: "default" },
     { panelId: "scrapbotStatus", zone: "right", order: 30, size: "default" },
   ],
@@ -49,6 +50,7 @@ export const layoutConfig = {
 
     // RIGHT – chat, scrapbot, scenes
     { panelId: "chat", zone: "right", order: 10, size: "tall" },
+    { panelId: "overlayOperator", zone: "right", order: 15, size: "default" },
     { panelId: "rundown", zone: "right", order: 10, size: "default" },
   
   ],
@@ -61,6 +63,7 @@ export const layoutConfig = {
 
     // Rundown less critical in BRB
     { panelId: "rundown", zone: "right", order: 10, size: "default" },
+    { panelId: "overlayOperator", zone: "right", order: 15, size: "default" },
 
     // Chat & Scrapbot still visible
     { panelId: "chat", zone: "right", order: 20, size: "default" },

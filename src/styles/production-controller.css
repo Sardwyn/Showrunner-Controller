@@ -149,6 +149,166 @@
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
 }
 
+.overlay-operator-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: 100%;
+}
+
+.overlay-operator-subtitle {
+  font-size: 11px;
+  color: rgba(226, 232, 240, 0.72);
+}
+
+.overlay-operator-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.overlay-operator-select,
+.overlay-operator-field input,
+.overlay-operator-apply,
+.overlay-operator-action {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+  color: inherit;
+  border-radius: 8px;
+}
+
+.overlay-operator-select {
+  width: 100%;
+  padding: 8px 10px;
+}
+
+.overlay-operator-status {
+  font-size: 11px;
+  color: #7dd3fc;
+  white-space: nowrap;
+}
+
+.overlay-operator-error {
+  border: 1px solid rgba(248, 113, 113, 0.25);
+  background: rgba(127, 29, 29, 0.25);
+  color: #fecaca;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 12px;
+}
+
+.overlay-operator-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(260px, 0.9fr);
+  gap: 10px;
+  min-height: 0;
+  flex: 1;
+}
+
+.overlay-operator-preview,
+.overlay-operator-sidebar {
+  min-height: 0;
+}
+
+.overlay-operator-stage {
+  position: relative;
+  width: 100%;
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.9), rgba(2, 6, 23, 0.95));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.overlay-operator-iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: transparent;
+}
+
+.overlay-operator-hotspot {
+  position: absolute;
+  border: 1px solid rgba(56, 189, 248, 0.45);
+  background: rgba(14, 165, 233, 0.12);
+  color: #e0f2fe;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 6px;
+  text-align: left;
+  transition: background 120ms ease, border-color 120ms ease, box-shadow 120ms ease;
+}
+
+.overlay-operator-hotspot:hover,
+.overlay-operator-hotspot.is-selected {
+  background: rgba(14, 165, 233, 0.2);
+  border-color: rgba(125, 211, 252, 0.95);
+  box-shadow: 0 0 0 1px rgba(125, 211, 252, 0.35);
+}
+
+.overlay-operator-hotspot span {
+  font-size: 11px;
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+.overlay-operator-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.overlay-operator-card,
+.overlay-operator-empty {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.overlay-operator-label {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.overlay-operator-meta {
+  margin-top: 4px;
+  font-size: 11px;
+  color: rgba(226, 232, 240, 0.66);
+}
+
+.overlay-operator-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.overlay-operator-action,
+.overlay-operator-apply {
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+.overlay-operator-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.overlay-operator-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+}
+
+.overlay-operator-field input {
+  padding: 8px 10px;
+}
+
 .pc-panel-default {
   min-height: 150px;
 }
