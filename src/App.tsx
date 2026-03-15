@@ -27,6 +27,7 @@ import { StudioContextProvider } from "./runtime/StudioContext";
 import { useScrapbotBridge } from "./runtime/useScrapbotBridge";
 import { useRundownEventBridge } from "./runtime/useRundownEventBridge";
 import { BridgeHost } from "./runtime/BridgeHost";
+import { OverlayControlProvider } from "./runtime/OverlayControlContext";
 
 
 // Panel components
@@ -39,6 +40,7 @@ import GlobalControls from "./components/GlobalControls";
 import OBSScenePanel from "./components/OBSScenePanel";
 import ConnectionStatusBar from "./components/ConnectionStatusBar";
 import PreviewMonitor from "./components/PreviewMonitor";
+import ComponentControlPanel from "./components/ComponentControlPanel";
 import StudioClock from "./components/StudioClock";
 import ScrapbotStatusPanel from "./components/ScrapbotStatusPanel";
 import ChatPanel from "./components/ChatPanel";
@@ -57,6 +59,7 @@ import DebugEventPanel from "./components/DebugEventPanel";
 const PANEL_REGISTRY = {
   programMonitor: ProgramMonitor,
   previewMonitor: PreviewMonitor,
+  componentControls: ComponentControlPanel,
   obsScenes: OBSScenePanel,
   transition: TransitionPanel,
   overlayOperator: OverlayOperatorPanel,
@@ -157,6 +160,7 @@ const ControllerShell: React.FC<ControllerShellProps> = ({
     {/* ✅ Bridges run inside RundownEngine + Studio context */}
     <BridgeHost />
 
+    <OverlayControlProvider>
     <LayoutGroup id="production-controller-layout">
       <div className={`pc-root theme-${theme}`}>
         {/* Top status/header row */}
@@ -233,6 +237,7 @@ const ControllerShell: React.FC<ControllerShellProps> = ({
         </main>
       </div>
     </LayoutGroup>
+    </OverlayControlProvider>
   </RundownEngineProvider>
 );
 

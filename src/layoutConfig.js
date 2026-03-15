@@ -21,6 +21,7 @@ export const layoutConfig = {
 
     // LEFT – preview + camera/lighting/audio
     { panelId: "previewMonitor", zone: "left", order: 10, size: "monitor" },
+    { panelId: "componentControls", zone: "left", order: 15, size: "default" },
     { panelId: "camera", zone: "left", order: 20, size: "default" },
     { panelId: "debugEvents", zone: "left", order: 40, size: "tall" }, // ✅
     { panelId: "audio", zone: "left", order: 40, size: "default" },
@@ -43,6 +44,7 @@ export const layoutConfig = {
 
     // LEFT – confidence/program + tech controls
     { panelId: "programMonitor", zone: "left", order: 10, size: "tall" },
+    { panelId: "componentControls", zone: "left", order: 15, size: "default" },
     { panelId: "obsScenes", zone: "left", order: 20, size: "default" },
     { panelId: "audio", zone: "left", order: 50, size: "default" },
   
@@ -57,6 +59,7 @@ export const layoutConfig = {
     // BRB – monitors are still tall but rebalanced
     { panelId: "programMonitor", zone: "center", order: 10, size: "monitor" },
     { panelId: "previewMonitor", zone: "left", order: 10, size: "monitor" },
+    { panelId: "componentControls", zone: "left", order: 15, size: "default" },
     { panelId: "transition", zone: "center", order: 30, size: "default" },
 
     // Rundown less critical in BRB
