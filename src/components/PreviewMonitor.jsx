@@ -453,7 +453,7 @@ export default function PreviewMonitor() {
               {overlayStatus ? ` · ${overlayStatus}` : ""}
             </div>
 
-            {overlayData?.components?.length ? (
+            {overlayData?.components?.length && !lowerThirdMode ? (
               <div className="preview-monitor-component-strip">
                 {overlayData.components.map((component) => (
                   <button
@@ -493,7 +493,7 @@ export default function PreviewMonitor() {
                 {overlayError ? <div className="preview-monitor-component-error">{overlayError}</div> : null}
 
                 {lowerThirdMode ? (
-                  <div className="preview-monitor-lower-third-grid">
+                  <div className="preview-monitor-lower-third-strip">
                     <label className="preview-monitor-component-field">
                       <span>Guest Name</span>
                       <input
@@ -510,6 +510,14 @@ export default function PreviewMonitor() {
                         onChange={(e) => setDraftProps((current) => ({ ...current, subtitle: e.target.value }))}
                       />
                     </label>
+                    <div className="preview-monitor-component-actions preview-monitor-component-actions--inline">
+                      <button type="button" className="preview-monitor-component-button is-secondary" onClick={resetDraftProps}>
+                        Reset
+                      </button>
+                      <button type="button" className="preview-monitor-component-button" disabled={!draftDirty} onClick={applyProps}>
+                        {draftDirty ? "Apply" : "Saved"}
+                      </button>
+                    </div>
                   </div>
                 ) : (
                   <div className="preview-monitor-generic-grid">
@@ -538,14 +546,16 @@ export default function PreviewMonitor() {
                   </div>
                 )}
 
-                <div className="preview-monitor-component-actions preview-monitor-component-actions--footer">
-                  <button type="button" className="preview-monitor-component-button is-secondary" onClick={resetDraftProps}>
-                    Reset
-                  </button>
-                  <button type="button" className="preview-monitor-component-button" disabled={!draftDirty} onClick={applyProps}>
-                    {draftDirty ? "Apply Update" : "Up to Date"}
-                  </button>
-                </div>
+                {!lowerThirdMode && (
+                  <div className="preview-monitor-component-actions preview-monitor-component-actions--footer">
+                    <button type="button" className="preview-monitor-component-button is-secondary" onClick={resetDraftProps}>
+                      Reset
+                    </button>
+                    <button type="button" className="preview-monitor-component-button" disabled={!draftDirty} onClick={applyProps}>
+                      {draftDirty ? "Apply Update" : "Up to Date"}
+                    </button>
+                  </div>
+                )}
               </div>
             ) : (
               <div className="preview-monitor-empty-state">
