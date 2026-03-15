@@ -28,14 +28,7 @@ function buildComponentPacket({ overlay, component, type, payload }) {
   });
 }
 
-function componentKind(component) {
-  const runtimeKind = String(component?.metadata?.runtimeKind || "");
-  if (runtimeKind === "lowerThird") return "Lower Third";
-  if (runtimeKind) return runtimeKind;
-  return "Component";
-}
-
-function componentActions(component) {
+function resolveQuickActions(component) {
   if (Array.isArray(component?.quickActions) && component.quickActions.length) {
     return component.quickActions;
   }
@@ -46,6 +39,13 @@ function componentActions(component) {
     ];
   }
   return [];
+}
+
+function componentKindLabel(component) {
+  const runtimeKind = String(component?.metadata?.runtimeKind || "");
+  if (runtimeKind === "lowerThird") return "Lower Third";
+  if (runtimeKind) return runtimeKind;
+  return "Component";
 }
 
 export default function PreviewMonitor() {
@@ -67,29 +67,28 @@ export default function PreviewMonitor() {
   const [overlayLoading, setOverlayLoading] = useState(false);
   const [overlayError, setOverlayError] = useState("");
   const [overlayStatus, setOverlayStatus] = useState("");
-  const [controlsOpen, setControlsOpen] = useState(true);
+  const [selectionMode, setSelectionMode] = useState(false);
 
   useEffect(() => {
     async function loadDevices() {
       try {
         const all = await navigator.mediaDevices.enumerateDevices();
         const videoInputs = all.filter((d) => d.kind === "videoinput");
-
         setDevices(videoInputs);
 
         const storedId = window.localStorage.getItem("scraplet_preview_deviceId");
-
         if (storedId && videoInputs.some((d) => d.deviceId === storedId)) {
           setSelectedDeviceId(storedId);
-        } else {
-          const obsLike =
-            videoInputs.find((d) => (d.label || "").toLowerCase().includes("obs virtual")) ||
-            videoInputs.find((d) => (d.label || "").toLowerCase().includes("obs-camera")) ||
-            videoInputs[0];
+          return;
+        }
 
-          if (obsLike) {
-            setSelectedDeviceId(obsLike.deviceId);
-          }
+        const obsLike =
+          videoInputs.find((d) => (d.label || "").toLowerCase().includes("obs virtual")) ||
+          videoInputs.find((d) => (d.label || "").toLowerCase().includes("obs-camera")) ||
+          videoInputs[0];
+
+        if (obsLike) {
+          setSelectedDeviceId(obsLike.deviceId);
         }
       } catch (err) {
         console.error("[PreviewMonitor] enumerateDevices error:", err);
@@ -116,27 +115,18 @@ export default function PreviewMonitor() {
 
   useEffect(() => {
     if (camState !== "live") return;
-
-    const v = videoRef.current;
+    const video = videoRef.current;
     const stream = streamRef.current;
+    if (!video || !stream) return;
 
-    if (!v || !stream) return;
-
-    v.srcObject = stream;
-
+    video.srcObject = stream;
     const handleMetadata = () => {
-      setVideoInfo({
-        width: v.videoWidth,
-        height: v.videoHeight,
-      });
-      v.play().catch((err) => console.error("[PreviewMonitor] play() error:", err));
+      setVideoInfo({ width: video.videoWidth, height: video.videoHeight });
+      video.play().catch((err) => console.error("[PreviewMonitor] play() error:", err));
     };
 
-    v.addEventListener("loadedmetadata", handleMetadata);
-
-    return () => {
-      v.removeEventListener("loadedmetadata", handleMetadata);
-    };
+    video.addEventListener("loadedmetadata", handleMetadata);
+    return () => video.removeEventListener("loadedmetadata", handleMetadata);
   }, [camState]);
 
   const loadOverlays = useCallback(async () => {
@@ -159,10 +149,12 @@ export default function PreviewMonitor() {
       setSelectedComponentId("");
       return;
     }
+
     const res = await fetch(resolveDashboardUrl(`/dashboard/api/controller/overlays/${encodeURIComponent(overlayId)}/components`), {
       credentials: "include",
     });
     if (!res.ok) throw new Error(`Failed to load exposed components (${res.status})`);
+
     const data = await res.json();
     const components = Array.isArray(data?.components) ? data.components : [];
     setOverlayData(data);
@@ -181,8 +173,7 @@ export default function PreviewMonitor() {
     setOverlayError("");
     loadOverlays()
       .catch((err) => {
-        if (!alive) return;
-        setOverlayError(err?.message || "Failed to load overlays");
+        if (alive) setOverlayError(err?.message || "Failed to load overlays");
       })
       .finally(() => {
         if (alive) setOverlayLoading(false);
@@ -197,6 +188,7 @@ export default function PreviewMonitor() {
       setOverlayData(null);
       return;
     }
+
     window.localStorage.setItem("scraplet_overlay_operator_overlayId", selectedOverlayId);
     let alive = true;
     setOverlayLoading(true);
@@ -232,15 +224,17 @@ export default function PreviewMonitor() {
     setDraftProps(next);
   }, [selectedComponent]);
 
-  const quickActions = useMemo(() => componentActions(selectedComponent), [selectedComponent]);
+  const quickActions = useMemo(() => resolveQuickActions(selectedComponent), [selectedComponent]);
 
   const draftDirty = useMemo(() => {
     if (!selectedComponent) return false;
     return (selectedComponent.editableProps || []).some((key) => {
-      const currentValue = selectedComponent.propValues?.[key] ?? "";
-      return String(draftProps[key] ?? "") !== String(currentValue ?? "");
+      const current = selectedComponent.propValues?.[key] ?? "";
+      return String(draftProps[key] ?? "") !== String(current);
     });
   }, [draftProps, selectedComponent]);
+
+  const lowerThirdMode = selectedComponent?.metadata?.runtimeKind === "lowerThird";
 
   async function connectCamera() {
     if (!selectedDeviceId) {
@@ -259,13 +253,12 @@ export default function PreviewMonitor() {
         streamRef.current = null;
       }
 
-      const dev = devices.find((d) => d.deviceId === selectedDeviceId);
+      const device = devices.find((d) => d.deviceId === selectedDeviceId);
       const stream = await navigator.mediaDevices.getUserMedia({
         video: { deviceId: { exact: selectedDeviceId } },
       });
       streamRef.current = stream;
-
-      setDeviceLabel(dev ? dev.label : "Unknown device");
+      setDeviceLabel(device ? device.label : "Unknown device");
       window.localStorage.setItem("scraplet_preview_deviceId", selectedDeviceId);
       setCamState("live");
     } catch (err) {
@@ -290,9 +283,7 @@ export default function PreviewMonitor() {
       setOverlayLoading(true);
       setOverlayError("");
       await loadOverlays();
-      if (selectedOverlayId) {
-        await loadOverlayComponents(selectedOverlayId);
-      }
+      if (selectedOverlayId) await loadOverlayComponents(selectedOverlayId);
       setOverlayStatus("Refreshed");
       window.setTimeout(() => setOverlayStatus(""), 1200);
     } catch (err) {
@@ -344,13 +335,7 @@ export default function PreviewMonitor() {
           ...current,
           components: current.components.map((component) =>
             component.instanceId === selectedComponent.instanceId
-              ? {
-                  ...component,
-                  propValues: {
-                    ...component.propValues,
-                    ...draftProps,
-                  },
-                }
+              ? { ...component, propValues: { ...component.propValues, ...draftProps } }
               : component
           ),
         };
@@ -362,26 +347,33 @@ export default function PreviewMonitor() {
     }
   }
 
+  function resetDraftProps() {
+    if (!selectedComponent) return;
+    const next = {};
+    for (const key of selectedComponent.editableProps || []) {
+      next[key] = selectedComponent.propValues?.[key] ?? "";
+    }
+    setDraftProps(next);
+  }
+
   const showConnectUI = camState !== "live";
 
   return (
     <div className="pc-panel-body preview-monitor">
-      <div className="monitor-label monitor-label-preview">PREVIEW</div>
+      <div className="monitor-label monitor-label-preview">Preview</div>
 
       <div className="preview-monitor-toolbar">
         {devices.length > 0 && (
-          <div className="preview-monitor-device-selector">
-            <label className="preview-monitor-device-label">
-              Source:
-              <select value={selectedDeviceId || ""} onChange={(e) => setSelectedDeviceId(e.target.value)}>
-                {devices.map((d) => (
-                  <option key={d.deviceId} value={d.deviceId}>
-                    {d.label || "(Unnamed video device)"}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
+          <label className="preview-monitor-device-label">
+            Source:
+            <select value={selectedDeviceId || ""} onChange={(e) => setSelectedDeviceId(e.target.value)}>
+              {devices.map((device) => (
+                <option key={device.deviceId} value={device.deviceId}>
+                  {device.label || "(Unnamed video device)"}
+                </option>
+              ))}
+            </select>
+          </label>
         )}
 
         <div className="preview-monitor-overlay-controls">
@@ -396,6 +388,9 @@ export default function PreviewMonitor() {
               ))}
             </select>
           </label>
+          <button type="button" className="preview-monitor-refresh" onClick={() => setSelectionMode((value) => !value)}>
+            {selectionMode ? "Done" : "Select"}
+          </button>
           <button type="button" className="preview-monitor-refresh" onClick={refreshOverlayControls}>
             Refresh
           </button>
@@ -430,59 +425,94 @@ export default function PreviewMonitor() {
                 const top = `${(bounds.y / overlayData.overlay.baseResolution.height) * 100}%`;
                 const width = `${(bounds.width / overlayData.overlay.baseResolution.width) * 100}%`;
                 const height = `${(bounds.height / overlayData.overlay.baseResolution.height) * 100}%`;
+                const selected = selectedComponentId === component.instanceId;
+                const interactive = selectionMode || selected;
                 return (
                   <button
                     key={component.instanceId}
                     type="button"
-                    className={`preview-monitor-hotspot ${selectedComponentId === component.instanceId ? "is-selected" : ""}`}
+                    className={`preview-monitor-hotspot ${selected ? "is-selected" : ""} ${interactive ? "is-active" : ""}`}
                     style={{ left, top, width, height }}
                     onClick={() => {
                       setSelectedComponentId(component.instanceId);
-                      setControlsOpen(true);
+                      setSelectionMode(false);
                     }}
                     title={component.label}
+                    tabIndex={interactive ? 0 : -1}
                   >
-                    <span>{component.label}</span>
+                    {(selectionMode || selected) && <span>{component.label}</span>}
                   </button>
                 );
               })}
+          </div>
 
-            {selectedComponent && (
-              <div className={`preview-monitor-component-card ${controlsOpen ? "is-open" : ""}`}>
-                <div className="preview-monitor-component-header">
+          <div className="preview-monitor-footer">
+            <div className="preview-monitor-source">
+              {deviceLabel || "Unknown device"} · {videoInfo.width}×{videoInfo.height}
+              {overlayLoading ? " · Loading components…" : ""}
+              {overlayStatus ? ` · ${overlayStatus}` : ""}
+            </div>
+
+            {overlayData?.components?.length ? (
+              <div className="preview-monitor-component-strip">
+                {overlayData.components.map((component) => (
+                  <button
+                    key={component.instanceId}
+                    type="button"
+                    className={`preview-monitor-component-chip ${selectedComponentId === component.instanceId ? "is-selected" : ""}`}
+                    onClick={() => setSelectedComponentId(component.instanceId)}
+                  >
+                    <span className="preview-monitor-component-chip-label">{component.label}</span>
+                    <span className="preview-monitor-component-chip-kind">{componentKindLabel(component)}</span>
+                  </button>
+                ))}
+              </div>
+            ) : null}
+
+            {selectedComponent ? (
+              <div className="preview-monitor-operator">
+                <div className="preview-monitor-operator-header">
                   <div>
                     <div className="preview-monitor-component-label">{selectedComponent.label}</div>
-                    <div className="preview-monitor-component-meta">{componentKind(selectedComponent)}</div>
+                    <div className="preview-monitor-component-meta">{componentKindLabel(selectedComponent)}</div>
                   </div>
-                  <button
-                    type="button"
-                    className="preview-monitor-card-toggle"
-                    onClick={() => setControlsOpen((open) => !open)}
-                  >
-                    {controlsOpen ? "Hide" : "Show"}
-                  </button>
+                  <div className="preview-monitor-component-actions">
+                    {quickActions.map((action) => (
+                      <button
+                        key={`${action.id}_${action.event || ""}`}
+                        type="button"
+                        className="preview-monitor-component-button"
+                        onClick={() => runQuickAction(action)}
+                      >
+                        {action.label}
+                      </button>
+                    ))}
+                  </div>
                 </div>
 
-                {controlsOpen && (
-                  <>
-                    {overlayError ? <div className="preview-monitor-component-error">{overlayError}</div> : null}
-                    {overlayStatus ? <div className="preview-monitor-component-status">{overlayStatus}</div> : null}
+                {overlayError ? <div className="preview-monitor-component-error">{overlayError}</div> : null}
 
-                    {quickActions.length ? (
-                      <div className="preview-monitor-component-actions">
-                        {quickActions.map((action) => (
-                          <button
-                            key={`${action.id}_${action.event || ""}`}
-                            type="button"
-                            className="preview-monitor-component-button"
-                            onClick={() => runQuickAction(action)}
-                          >
-                            {action.label}
-                          </button>
-                        ))}
-                      </div>
-                    ) : null}
-
+                {lowerThirdMode ? (
+                  <div className="preview-monitor-lower-third-grid">
+                    <label className="preview-monitor-component-field">
+                      <span>Guest Name</span>
+                      <input
+                        type="text"
+                        value={draftProps.title ?? ""}
+                        onChange={(e) => setDraftProps((current) => ({ ...current, title: e.target.value }))}
+                      />
+                    </label>
+                    <label className="preview-monitor-component-field">
+                      <span>Guest Title</span>
+                      <input
+                        type="text"
+                        value={draftProps.subtitle ?? ""}
+                        onChange={(e) => setDraftProps((current) => ({ ...current, subtitle: e.target.value }))}
+                      />
+                    </label>
+                  </div>
+                ) : (
+                  <div className="preview-monitor-generic-grid">
                     {(selectedComponent.editableProps || []).map((key) => {
                       const schema = selectedComponent.propsSchema?.[key];
                       const type = schema?.type || "text";
@@ -505,41 +535,25 @@ export default function PreviewMonitor() {
                         </label>
                       );
                     })}
-
-                    {(selectedComponent.editableProps || []).length ? (
-                      <div className="preview-monitor-component-actions">
-                        <button
-                          type="button"
-                          className="preview-monitor-component-button is-secondary"
-                          onClick={() => {
-                            const next = {};
-                            for (const key of selectedComponent.editableProps || []) {
-                              next[key] = selectedComponent.propValues?.[key] ?? "";
-                            }
-                            setDraftProps(next);
-                          }}
-                        >
-                          Reset
-                        </button>
-                        <button
-                          type="button"
-                          className="preview-monitor-component-button"
-                          disabled={!draftDirty}
-                          onClick={applyProps}
-                        >
-                          {draftDirty ? "Apply Update" : "Up to Date"}
-                        </button>
-                      </div>
-                    ) : null}
-                  </>
+                  </div>
                 )}
+
+                <div className="preview-monitor-component-actions preview-monitor-component-actions--footer">
+                  <button type="button" className="preview-monitor-component-button is-secondary" onClick={resetDraftProps}>
+                    Reset
+                  </button>
+                  <button type="button" className="preview-monitor-component-button" disabled={!draftDirty} onClick={applyProps}>
+                    {draftDirty ? "Apply Update" : "Up to Date"}
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="preview-monitor-empty-state">
+                {overlayData?.components?.length
+                  ? "Select a component from the strip or turn on Select mode to target it in preview."
+                  : "This overlay has no controller-exposed components yet."}
               </div>
             )}
-          </div>
-
-          <div className="preview-monitor-source">
-            {deviceLabel || "Unknown device"} · {videoInfo.width}×{videoInfo.height}
-            {selectedComponent ? ` · ${selectedComponent.label}` : ""}
           </div>
         </>
       )}
