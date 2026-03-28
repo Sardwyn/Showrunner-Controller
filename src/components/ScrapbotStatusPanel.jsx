@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useStudioContext } from "../runtime/StudioContext";
 
 const DASHBOARD_BASE = typeof window !== "undefined" && window.location.hostname === "localhost"
   ? "https://scraplet.store"
@@ -19,14 +20,26 @@ const statusPill = (label, tone = "ok") => {
 };
 
 export default function ScrapbotStatusPanel() {
+  const { ctx } = useStudioContext();
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
 
+  // Scope to the active Kick channel from studio context
+  const channelSlug = ctx?.kick?.channel?.slug
+    || ctx?.kick?.channel?.channel_slug
+    || ctx?.kick?.channel?.username
+    || null;
+  const platform = channelSlug ? "kick" : null;
+
   const fetchStatus = async () => {
     try {
-      const res = await fetch(`${DASHBOARD_BASE}/dashboard/api/scrapbot/status`, {
-        credentials: "include",
-      });
+      const params = new URLSearchParams();
+      if (channelSlug) params.set("channel_slug", channelSlug);
+      if (platform) params.set("platform", platform);
+      const res = await fetch(
+        `${DASHBOARD_BASE}/dashboard/api/scrapbot/status?${params}`,
+        { credentials: "include" }
+      );
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const json = await res.json();
       if (json.ok) setData(json);
@@ -39,7 +52,7 @@ export default function ScrapbotStatusPanel() {
     fetchStatus();
     const interval = setInterval(fetchStatus, 15000);
     return () => clearInterval(interval);
-  }, []);
+  }, [channelSlug]);
 
   const scrapbot = data?.scrapbot;
   const streamer = data?.streamer;
@@ -53,7 +66,14 @@ export default function ScrapbotStatusPanel() {
 
   return (
     <div className="controller-panel">
-      <h2 className="controller-panel-title mb-2">Scrapbot Status</h2>
+      <h2 className="controller-panel-title mb-2">
+        Scrapbot Status
+        {channelSlug && (
+          <span className="ml-2 text-[0.65rem] text-slate-500 font-normal normal-case tracking-normal">
+            #{channelSlug}
+          </span>
+        )}
+      </h2>
 
       {/* Connection status */}
       <div className="flex items-center justify-between mb-3 text-xs">
@@ -98,6 +118,20 @@ export default function ScrapbotStatusPanel() {
           </div>
         </div>
       </div>
+
+      {/* Platform stats - scoped to active channel's platform */}
+      {streamer?.platform_stats?.length > 0 && (
+        <div className="mb-3 text-[0.68rem] text-slate-300 bg-slate-900/50 border border-slate-700/60 rounded-lg px-2 py-1.5">
+          {streamer.platform_stats.map((s, i) => (
+            <div key={i} className="flex gap-3 flex-wrap">
+              <span className="text-slate-400 uppercase tracking-[0.12em]">{s.platform}</span>
+              <span>{(s.followers || 0).toLocaleString()} followers</span>
+              <span>Avg CCV: {s.ccv ?? "?"}</span>
+              <span>Engagement: {s.engagement ?? "?"}</span>
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* Session averages */}
       {streamer?.session_averages && (
