@@ -3,6 +3,8 @@
 // Scrapbot, OBS, hotkeys, and local UI actions can all publish events here.
 // The rundown engine and panels can subscribe to it.
 
+import { useEffect } from "react";
+
 export type StudioEvent = {
   type: string;          // e.g., "kick.chat.message", "debug.test"
   source: string;        // "scrapbot" | "obs" | "local" | "dashboard" | ...
@@ -35,6 +37,19 @@ export function publishEvent(event: StudioEvent) {
 export function subscribeEvents(fn: Listener) {
   listeners.add(fn);
   return () => {
-    listeners.delete(fn); // explicitly ignore the boolean
+    listeners.delete(fn);
   };
+}
+
+/**
+ * React hook: subscribe to a specific event type.
+ * Automatically unsubscribes on unmount.
+ */
+export function useEventBus(type: string, handler: (event: StudioEvent) => void) {
+  useEffect(() => {
+    const unsub = subscribeEvents((event) => {
+      if (event.type === type) handler(event);
+    });
+    return unsub;
+  }, [type]);
 }
