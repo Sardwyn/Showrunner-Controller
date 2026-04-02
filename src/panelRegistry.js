@@ -14,6 +14,7 @@ import ScrapbotStatusPanel from "./components/ScrapbotStatusPanel";
 import ChatPanel from "./components/ChatPanel";
 import TransitionPanel from "./components/TransitionPanel";
 import DebugEventPanel from "./components/DebugEventPanel";
+import SubathonTimerPanel from "./components/SubathonTimerPanel";
 
 export const PANEL_REGISTRY = {
   videoMonitor: {
@@ -38,6 +39,14 @@ export const PANEL_REGISTRY = {
     component: RundownPanel,
     defaultSize: "tall",
     tags: ["show-control"],
+  },
+  subathonTimer: {
+    id: "subathonTimer",
+    label: "Subathon Timer",
+    component: SubathonTimerPanel,
+    defaultSize: "compact",
+    icon: "timer",
+    tags: ["show-control", "subathon"],
   },
   // ...repeat for camera, lighting, chat, scrapbotStatus, transition, etc.
 };
